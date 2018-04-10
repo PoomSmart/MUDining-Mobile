@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.untitled.untitledapk.Recommend">
 
+    <Button
+        android:id="@+id/rec"
+        android:layout_width="175dp"
+        android:layout_height="95dp"
+        android:text="Recommend"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="186dp" />
 </android.support.constraint.ConstraintLayout>
