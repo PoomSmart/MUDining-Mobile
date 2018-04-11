@@ -12,22 +12,17 @@ import android.widget.TextView;
 
 public class RecommendListActivity extends AppCompatActivity {
 
-    TextView restaurantName;
-    TextView restaurantInfo;
-    ImageView restaurantPhoto;
-
+    ListView lv;
+    String[] RestaurantName = {"Ready Mele", "Sumo Grill", "Just test"};
+    String[] RestaurantInfo = {"test", "easy", "gg we lose"};
+    Integer[] RestaurantPhoto = {R.drawable.readymele, R.drawable.zumo, R.drawable.wtf};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_list);
 
-        restaurantName = (TextView)findViewById(R.id.restaurant_name);
-        restaurantInfo = (TextView)findViewById(R.id.restaurant_info);
-        restaurantPhoto = (ImageView)findViewById(R.id.restaurant_photo);
-
-        restaurantName.setText("ReadyMele");
-        restaurantInfo.setText("Modern retaurant serves fusion food");
-        restaurantPhoto.setImageResource(R.drawable.ic_launcher_background);
-
+        lv = findViewById(R.id.lv);
+            CustomListview customListview = new CustomListview(this,RestaurantName,RestaurantInfo,RestaurantPhoto);
+            lv.setAdapter(customListview);
     }
 }
