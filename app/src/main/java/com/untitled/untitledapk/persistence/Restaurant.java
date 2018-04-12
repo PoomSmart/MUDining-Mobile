@@ -21,8 +21,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.UUID;
-
 /**
  * Immutable model class for a Restaurant
  */
@@ -32,7 +30,7 @@ public class Restaurant {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "restaurantid")
-    private int mId;
+    private Integer mId;
 
     @ColumnInfo(name = "restaurantname")
     private String mName;
@@ -53,13 +51,15 @@ public class Restaurant {
         this.mName = mName;
         this.mLatitude = null;
         this.mLongitude = null;
+        this.mFoodTypes = 0;
+        this.mCategoryTypes = 0;
     }
 
-    public int getId() {
+    public Integer getId() {
         return mId;
     }
 
-    public void setId(@NonNull int mId) {
+    public void setId(@NonNull Integer mId) {
         this.mId = mId;
     }
 

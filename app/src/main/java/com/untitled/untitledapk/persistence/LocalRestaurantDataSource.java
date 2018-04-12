@@ -18,6 +18,8 @@ package com.untitled.untitledapk.persistence;
 
 import com.untitled.untitledapk.RestaurantDataSource;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 
 /**
@@ -32,8 +34,13 @@ public class LocalRestaurantDataSource implements RestaurantDataSource {
     }
 
     @Override
-    public Flowable<Restaurant> getRestaurants() {
+    public List<Restaurant> getRestaurants() {
         return mRestaurantDao.getRestaurants();
+    }
+
+    @Override
+    public Flowable<Restaurant> getRestaurant() {
+        return mRestaurantDao.getRestaurant();
     }
 
     @Override

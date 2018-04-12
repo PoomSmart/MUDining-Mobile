@@ -21,6 +21,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 
 /**
@@ -35,7 +37,15 @@ public interface RestaurantDao {
      * @return
      */
     @Query("SELECT * FROM Restaurants")
-    Flowable<Restaurant> getRestaurants();
+    List<Restaurant> getRestaurants();
+
+    /**
+     * Return a restaurant.
+     *
+     * @return
+     */
+    @Query("SELECT * FROM Restaurants LIMIT 1")
+    Flowable<Restaurant> getRestaurant();
 
     /**
      * Insert a restaurant in the database. If the restaurant already exists, replace it.

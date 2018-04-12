@@ -18,6 +18,8 @@ package com.untitled.untitledapk;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 
 /**
@@ -30,7 +32,14 @@ public interface RestaurantDataSource {
      *
      * @return the restaurants from the data source.
      */
-    Flowable<Restaurant> getRestaurants();
+    List<Restaurant> getRestaurants();
+
+    /**
+     * Gets a restaurant from the data source.
+     *
+     * @return the restaurant from the data source.
+     */
+    Flowable<Restaurant> getRestaurant();
 
     /**
      * Inserts the restaurant into the data source, or, if this is an existing restaurant, updates it.
