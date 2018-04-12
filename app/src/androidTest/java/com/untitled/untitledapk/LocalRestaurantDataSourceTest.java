@@ -44,12 +44,13 @@ public class LocalRestaurantDataSourceTest {
     public void initDb() throws Exception {
         // using an in-memory database because the information stored here disappears when the
         // process is killed
-        mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getTargetContext(),
+        mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
                 RestaurantsDatabase.class)
                 // allowing main thread queries, just for testing
                 .allowMainThreadQueries()
                 .build();
         mDataSource = new LocalRestaurantDataSource(mDatabase.restaurantDao());
+        RESTAURANT.setId(1);
     }
 
     @After
@@ -70,26 +71,6 @@ public class LocalRestaurantDataSourceTest {
                     // The emitted restaurant is the expected one
                     return restaurant != null && restaurant.getId().equals(RESTAURANT.getId()) &&
                             restaurant.getName().equals(RESTAURANT.getName());
-                });
-    }
-
-    @Test
-    public void updateAndGetRestaurant() {
-        // Given that we have a restaurant in the data source
-        mDataSource.insertOrUpdateRestaurant(RESTAURANT);
-
-        // When we are updating the name of the restaurant
-        Restaurant updatedRestaurant = new Restaurant("new restaurantname");
-        mDataSource.insertOrUpdateRestaurant(updatedRestaurant);
-
-        // When subscribing to the emissions of the restaurant
-        mDatabase.restaurantDao().getRestaurant()
-                .test()
-                // assertValue asserts that there was only one emission of the restaurant
-                .assertValue(restaurant -> {
-                    // The emitted restaurant is the expected one
-                    return restaurant != null && restaurant.getId().equals(RESTAURANT.getId()) &&
-                            restaurant.getName().equals("new restaurantname");
                 });
     }
 
