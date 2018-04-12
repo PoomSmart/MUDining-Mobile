@@ -47,12 +47,16 @@ public class Restaurant {
     @ColumnInfo(name = "categorytypes")
     private int mCategoryTypes;
 
+    @ColumnInfo(name = "description")
+    private String mDescription;
+
     public Restaurant(String mName) {
         this.mName = mName;
         this.mLatitude = null;
         this.mLongitude = null;
         this.mFoodTypes = 0;
         this.mCategoryTypes = 0;
+        this.mDescription = null;
     }
 
     public Integer getId() {
@@ -97,5 +101,13 @@ public class Restaurant {
 
     public void setCategoryTypes(int mCategoryTypes) {
         this.mCategoryTypes = mCategoryTypes;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String mDescription) {
+        this.mDescription = mDescription;
     }
 }
