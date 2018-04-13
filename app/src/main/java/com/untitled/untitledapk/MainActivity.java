@@ -26,10 +26,9 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         Integer restaurantId = 1;
         Restaurant restaurant = RestaurantManager.restaurantById(context, restaurantId);
-        Bitmap image = RestaurantImageManager.getImage(context, restaurantId);
         testIntent.putExtra("restaurantName", restaurant.getName());
         testIntent.putExtra("restaurantDescription", restaurant.getDescription());
-        testIntent.putExtra("restaurantImage", image);
+        testIntent.putExtra("restaurantId", restaurantId);
         startActivity(testIntent);
     }
 }

@@ -47,11 +47,10 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private void addRestaurantImage(Context context) {
         ImageView imageView = new ImageView(context);
-        imageView.setImageBitmap((Bitmap)getIntent().getExtras().get("restaurantImage"));
-        imageView.setMaxHeight(300);
-        imageView.setMinimumHeight(300);
-        Log.v("ddd", getIntent().getExtras().get("restaurantImage") + "");
-        mEditRestaurant.addView(imageView);
+        imageView.setImageBitmap(RestaurantImageManager.getImage(context, getIntent().getExtras().getInt("restaurantId")));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageView.setAdjustViewBounds(true);
+        mEditRestaurant.addView(imageView, 0);
     }
 
     private void generateTypes(Context context){
