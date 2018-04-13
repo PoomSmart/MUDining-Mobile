@@ -50,6 +50,14 @@ public interface RestaurantDataSource {
 
     /**
      * Deletes all restaurants from the data source.
+     *
      */
     void deleteAllRestaurants();
+
+    /**
+     * Delete the restaurant given the id.
+     *
+     * @param restaurantId
+     */
+    void deleteRestaurant(Integer restaurantId);
 }

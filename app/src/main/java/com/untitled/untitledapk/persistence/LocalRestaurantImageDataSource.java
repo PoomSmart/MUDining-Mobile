@@ -16,6 +16,8 @@
 
 package com.untitled.untitledapk.persistence;
 
+import android.arch.persistence.room.Query;
+
 import com.untitled.untitledapk.RestaurantImageDataSource;
 
 import java.util.List;
@@ -51,5 +53,10 @@ public class LocalRestaurantImageDataSource implements RestaurantImageDataSource
     @Override
     public void deleteAllRestaurantImages() {
         mRestaurantImageDao.deleteAllRestaurantImages();
+    }
+
+    @Override
+    public void deleteRestaurantImage(Integer restaurantId) {
+        mRestaurantImageDao.deleteRestaurantImage(restaurantId);
     }
 }

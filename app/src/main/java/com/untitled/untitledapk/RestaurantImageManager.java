@@ -4,10 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.untitled.untitledapk.persistence.RestaurantDao;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
 import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
+import com.untitled.untitledapk.persistence.RestaurantsDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,25 +21,44 @@ import io.reactivex.Flowable;
 
 public class RestaurantImageManager {
 
+    public static final String imageFolder = "restaurant_images";
+    private static RestaurantImageDao restaurantImageDao = null;
+
+    private static RestaurantImageDao getRestaurantImageDao(Context context) {
+        if (restaurantImageDao == null) {
+            RestaurantImagesDatabase restaurantImageDatabase = RestaurantImagesDatabase.getInstance(context);
+            return restaurantImageDao = restaurantImageDatabase.restaurantImageDao();
+        }
+        return restaurantImageDao;
+    }
+
     public static void saveImage(Context context, Integer restaurantId, Bitmap image) {
         FileOutputStream outputStream;
         String fileName = restaurantId + ".jpg";
         try {
             outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStream.write(image.getNinePatchChunk());
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            outputStream.write(stream.toByteArray());
             outputStream.close();
+            getRestaurantImageDao(context).insertRestaurantImage(new RestaurantImage(restaurantId, restaurantId + ""));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static void removeImage(Context context, Integer restaurantId) {
+        String fileName = restaurantId + ".jpg";
+        File file = new File(context.getFilesDir() + File.separator + imageFolder, fileName);
+        file.delete();
+        getRestaurantImageDao(context).deleteRestaurantImage(restaurantId);
+    }
+
     public static Bitmap getImage(Context context, Integer restaurantId) {
-        RestaurantImagesDatabase restaurantImagesDatabase = RestaurantImagesDatabase.getInstance(context);
-        RestaurantImageDao restaurantImageDao = restaurantImagesDatabase.restaurantImageDao();
-        Flowable<RestaurantImage> restaurantImage = restaurantImageDao.getRestaurantImage(restaurantId);
+        Flowable<RestaurantImage> restaurantImage = getRestaurantImageDao(context).getRestaurantImage(restaurantId);
         String imageName = restaurantImage.blockingFirst().getImageId();
         try {
-            InputStream input = new FileInputStream(new File(context.getFilesDir(), imageName));
+            InputStream input = new FileInputStream(new File(context.getFilesDir() + File.separator + imageFolder, imageName));
             return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             return null;

@@ -48,6 +48,14 @@ public interface RestaurantDao {
     Flowable<Restaurant> getRestaurant();
 
     /**
+     * Return the restaurant of the given restaurant id.
+     *
+     * @return
+     */
+    @Query("SELECT * FROM Restaurants WHERE restaurantid = :restaurantId")
+    Flowable<Restaurant> getRestaurant(Integer restaurantId);
+
+    /**
      * Insert a restaurant in the database. If the restaurant already exists, replace it.
      *
      * @param restaurant the restaurant to be inserted.
@@ -57,7 +65,16 @@ public interface RestaurantDao {
 
     /**
      * Delete all restaurants.
+     *
      */
     @Query("DELETE FROM Restaurants")
     void deleteAllRestaurants();
+
+    /**
+     * Delete the restaurant with the given id.
+     *
+     * @param restaurantId
+     */
+    @Query("DELETE FROM Restaurants WHERE restaurantid = :restaurantId")
+    void deleteRestaurant(Integer restaurantId);
 }

@@ -52,4 +52,9 @@ public class LocalRestaurantDataSource implements RestaurantDataSource {
     public void deleteAllRestaurants() {
         mRestaurantDao.deleteAllRestaurants();
     }
+
+    @Override
+    public void deleteRestaurant(Integer restaurantId) {
+        mRestaurantDao.deleteRestaurant(restaurantId);
+    }
 }

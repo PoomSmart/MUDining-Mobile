@@ -57,7 +57,16 @@ public interface RestaurantImageDao {
 
     /**
      * Delete all restaurant images.
+     *
      */
     @Query("DELETE FROM RestaurantImages")
     void deleteAllRestaurantImages();
+
+    /**
+     * Delete the restaurant image with the given restaurant id.
+     *
+     * @param restaurantId
+     */
+    @Query("DELETE FROM RestaurantImages WHERE restaurantid = :restaurantId")
+    void deleteRestaurantImage(Integer restaurantId);
 }

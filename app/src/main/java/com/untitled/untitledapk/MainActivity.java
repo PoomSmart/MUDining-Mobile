@@ -24,11 +24,10 @@ import java.io.OutputStreamWriter;
 public class MainActivity extends AppCompatActivity {
 
     private void populateRestaurants() {
-        RestaurantsDatabase restaurantsDatabase = RestaurantsDatabase.getInstance(getApplicationContext());
-        RestaurantDao restaurantDao = restaurantsDatabase.restaurantDao();
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
+        Context context = getApplicationContext();
+        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
+        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
+        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
     }
 
     private void populateRestaurantImages() {
@@ -78,9 +77,12 @@ public class MainActivity extends AppCompatActivity {
         if (isDefaultImagesCopied(context))
             return false;
         AssetManager assetManager = context.getAssets();
-        String assetPath = "restaurant_images";
+        String assetPath = RestaurantImageManager.imageFolder;
         File internalStorage = context.getFilesDir();
-        String internalStoragePath = internalStorage.getPath();
+        String internalStoragePath = internalStorage.getPath() + File.separator + RestaurantImageManager.imageFolder;
+        File internalStorageFolder = new File(internalStoragePath);
+        if (!internalStorageFolder.exists())
+            internalStorageFolder.mkdir();
         try {
             String images[] = assetManager.list(assetPath);
             for (String image : images) {

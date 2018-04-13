@@ -51,6 +51,14 @@ public interface RestaurantImageDataSource {
 
     /**
      * Deletes all restaurant images from the data source.
+     *
      */
     void deleteAllRestaurantImages();
+
+    /**
+     * Delete the restaurant image given the restaurant id.
+     *
+     * @param restaurantId
+     */
+    void deleteRestaurantImage(Integer restaurantId);
 }
