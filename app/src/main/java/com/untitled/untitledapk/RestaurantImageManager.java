@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.untitled.untitledapk.persistence.RestaurantDao;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
 import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
-import com.untitled.untitledapk.persistence.RestaurantsDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
