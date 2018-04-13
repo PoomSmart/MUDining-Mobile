@@ -10,6 +10,8 @@ import io.reactivex.Flowable;
 
 public class RestaurantManager {
 
+    public static String[] restaurantTypes = {"Type1", "Type2", "Type3"};
+    public static String[] categoryTypes = {"Category1", "Category2", "Category3"};
     private static RestaurantDao restaurantDao = null;
 
     private static RestaurantDao getRestaurantDao(Context context) {
@@ -33,4 +35,5 @@ public class RestaurantManager {
     public static void insertRestaurant(Context context, Restaurant restaurant) {
         getRestaurantDao(context).insertRestaurant(restaurant);
     }
+
 }
