@@ -1,8 +1,12 @@
 package com.untitled.untitledapk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+
+import com.untitled.untitledapk.persistence.Restaurant;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,6 +17,17 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseWorker.work(getApplicationContext());
 
-        startActivity(new Intent(this, EditRestaurantActivity.class));
+        // Intent test
+        test();
+    }
+
+    private void test() {
+        Intent testIntent = new Intent(this, EditRestaurantActivity.class);
+        Context context = getApplicationContext();
+        Integer restaurantId = 1;
+        Restaurant restaurant = RestaurantManager.restaurantById(context, restaurantId);
+        testIntent.putExtra("restaurantName", restaurant.getName());
+        testIntent.putExtra("restaurantDescription", restaurant.getDescription());
+        startActivity(testIntent);
     }
 }
