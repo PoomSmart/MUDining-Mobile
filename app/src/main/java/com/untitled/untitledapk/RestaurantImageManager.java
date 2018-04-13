@@ -56,7 +56,7 @@ public class RestaurantImageManager {
         Flowable<RestaurantImage> restaurantImage = getRestaurantImageDao(context).getRestaurantImage(restaurantId);
         String imageName = restaurantImage.blockingFirst().getImageId();
         try {
-            InputStream input = new FileInputStream(new File(context.getFilesDir() + File.separator + imageFolder, imageName));
+            InputStream input = new FileInputStream(new File(context.getFilesDir() + File.separator + imageFolder, imageName + ".jpg"));
             return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             return null;
