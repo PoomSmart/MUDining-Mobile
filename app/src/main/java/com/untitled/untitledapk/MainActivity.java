@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.untitled.untitledapk.persistence.Restaurant;
-import com.untitled.untitledapk.persistence.RestaurantDao;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
 import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
-import com.untitled.untitledapk.persistence.RestaurantsDatabase;
 
 import java.io.BufferedWriter;
 import java.io.File;
