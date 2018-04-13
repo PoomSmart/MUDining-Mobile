@@ -33,9 +33,9 @@ public class RestaurantImage {
     private Integer mRestaurantId;
 
     @ColumnInfo(name = "imageid")
-    private Integer mImageId;
+    private String mImageId;
 
-    public RestaurantImage(Integer mRestaurantId, Integer mImageId) {
+    public RestaurantImage(Integer mRestaurantId, String mImageId) {
         this.mRestaurantId = mRestaurantId;
         this.mImageId = mImageId;
     }
@@ -48,11 +48,11 @@ public class RestaurantImage {
         this.mRestaurantId = mRestaurantId;
     }
 
-    public Integer getImageId() {
+    public String getImageId() {
         return mImageId;
     }
 
-    public void setImageId(Integer mImageId) {
+    public void setImageId(String mImageId) {
         this.mImageId = mImageId;
     }
 

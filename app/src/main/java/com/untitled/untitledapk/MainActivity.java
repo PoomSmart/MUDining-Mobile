@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private void populateRestaurantImages() {
         RestaurantImagesDatabase restaurantImagesDatabase = RestaurantImagesDatabase.getInstance(getApplicationContext());
         RestaurantImageDao restaurantImageDao = restaurantImagesDatabase.restaurantImageDao();
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(1, 1));
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(2, 2));
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(3, 3));
+        restaurantImageDao.insertRestaurantImage(new RestaurantImage(1, "1"));
+        restaurantImageDao.insertRestaurantImage(new RestaurantImage(2, "2"));
+        restaurantImageDao.insertRestaurantImage(new RestaurantImage(3, "3"));
     }
 
     @Override
