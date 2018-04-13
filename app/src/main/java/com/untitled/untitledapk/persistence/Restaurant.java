@@ -18,6 +18,7 @@ package com.untitled.untitledapk.persistence;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -50,13 +51,18 @@ public class Restaurant {
     @ColumnInfo(name = "description")
     private String mDescription;
 
+    @Ignore
     public Restaurant(String mName) {
+        this(mName, null, null, 0, 0, null);
+    }
+
+    public Restaurant(String mName, Double mLatitude, Double mLongitude, int mFoodTypes, int mCategoryTypes, String mDescription) {
         this.mName = mName;
-        this.mLatitude = null;
-        this.mLongitude = null;
-        this.mFoodTypes = 0;
-        this.mCategoryTypes = 0;
-        this.mDescription = null;
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
+        this.mFoodTypes = mFoodTypes;
+        this.mCategoryTypes = mCategoryTypes;
+        this.mDescription = mDescription;
     }
 
     public Integer getId() {
