@@ -2,9 +2,9 @@ package com.untitled.untitledapk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
@@ -26,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         Integer restaurantId = 1;
         Restaurant restaurant = RestaurantManager.restaurantById(context, restaurantId);
+        Bitmap image = RestaurantImageManager.getImage(context, restaurantId);
         testIntent.putExtra("restaurantName", restaurant.getName());
         testIntent.putExtra("restaurantDescription", restaurant.getDescription());
+        testIntent.putExtra("restaurantImage", image);
         startActivity(testIntent);
     }
 }

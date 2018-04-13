@@ -2,11 +2,14 @@ package com.untitled.untitledapk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class EditRestaurantActivity extends AppCompatActivity {
@@ -14,6 +17,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private Button mSetLocationButton;
     private TextInputEditText mRestaurantNameField;
     private TextInputEditText mRestaurantDescriptionField;
+    private LinearLayout mEditRestaurant;
     private LinearLayout mRestaurantTypes;
     private LinearLayout mCategoryTypes;
     private CheckBox[] mcbRestaurantTypes;
@@ -31,12 +35,23 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mRestaurantDescriptionField = findViewById(R.id.restaurant_description_field);
         mRestaurantTypes = findViewById(R.id.restaurant_types_layout);
         mCategoryTypes = findViewById(R.id.category_types_layout);
+        mEditRestaurant = findViewById(R.id.edit_restaurant_layout);
 
+        addRestaurantImage(context);
         generateTypes(context);
         mSetLocationButton.setOnClickListener(v -> setLocation());
 
         mRestaurantNameField.setText(getIntent().getStringExtra("restaurantName"));
         mRestaurantDescriptionField.setText(getIntent().getStringExtra("restaurantDescription"));
+    }
+
+    private void addRestaurantImage(Context context) {
+        ImageView imageView = new ImageView(context);
+        imageView.setImageBitmap((Bitmap)getIntent().getExtras().get("restaurantImage"));
+        imageView.setMaxHeight(300);
+        imageView.setMinimumHeight(300);
+        Log.v("ddd", getIntent().getExtras().get("restaurantImage") + "");
+        mEditRestaurant.addView(imageView);
     }
 
     private void generateTypes(Context context){

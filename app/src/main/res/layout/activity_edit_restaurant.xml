@@ -7,6 +7,7 @@
     tools:context=".EditRestaurantActivity">
 
     <LinearLayout
+        android:id="@+id/edit_restaurant_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="true"
@@ -78,6 +79,26 @@
                     android:text="@string/category_types" />
 
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/save_restaurant_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_restaurant_text" />
+
+            <Button
+                android:id="@+id/discard_restaurant_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@android:string/cancel" />
         </LinearLayout>
     </LinearLayout>
 
