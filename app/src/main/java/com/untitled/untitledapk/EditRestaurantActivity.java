@@ -25,15 +25,18 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private FrameLayout mRestaurantImageLayout;
     private Button mChangeImageButton;
     private Button mSetLocationButton;
+    private Button mSaveRestaurantButton;
+    private Button mDiscardRestaurantButton;
     private TextInputEditText mRestaurantNameField;
     private TextInputEditText mRestaurantDescriptionField;
     private LinearLayout mEditRestaurantLayout;
-    private LinearLayout mRestaurantTypesLayout;
+    private LinearLayout mFoodTypesLayout;
     private LinearLayout mCategoryTypesLayout;
-    private CheckBox[] mcbRestaurantTypes;
+    private CheckBox[] mcbFoodTypes;
     private CheckBox[] mcbCategoryTypes;
 
     private Restaurant restaurant;
+    private Location updatedLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +47,12 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
         mChangeImageButton = findViewById(R.id.change_image_button);
         mSetLocationButton = findViewById(R.id.set_location_button);
+        mSaveRestaurantButton = findViewById(R.id.save_restaurant_button);
+        mDiscardRestaurantButton = findViewById(R.id.discard_restaurant_button);
         mRestaurantImageLayout = findViewById(R.id.restaurant_image_layout);
         mRestaurantNameField = findViewById(R.id.restaurant_name_field);
         mRestaurantDescriptionField = findViewById(R.id.restaurant_description_field);
-        mRestaurantTypesLayout = findViewById(R.id.restaurant_types_layout);
+        mFoodTypesLayout = findViewById(R.id.food_types_layout);
         mCategoryTypesLayout = findViewById(R.id.category_types_layout);
         mEditRestaurantLayout = findViewById(R.id.edit_restaurant_layout);
 
@@ -58,8 +63,32 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mSetLocationButton.setOnClickListener(v -> setLocationButtonClicked());
         modifyLocation();
 
+        mSaveRestaurantButton.setOnClickListener(v -> saveRestaurant());
+        mDiscardRestaurantButton.setOnClickListener(v -> finish());
+
         mRestaurantNameField.setText(restaurant.getName());
         mRestaurantDescriptionField.setText(restaurant.getDescription());
+    }
+
+    private void saveRestaurant() {
+        int foodTypes = 0;
+        int categoryTypes = 0;
+        for (int i = 0; i < mcbFoodTypes.length; i++) {
+            if (mcbFoodTypes[i].isChecked())
+                foodTypes |= 1 << i;
+        }
+        for (int i = 0; i < mcbCategoryTypes.length; i++) {
+            if (mcbCategoryTypes[i].isChecked())
+                categoryTypes |= 1 << i;
+        }
+        restaurant.setName(mRestaurantNameField.getText().toString());
+        restaurant.setDescription(mRestaurantDescriptionField.getText().toString());
+        restaurant.setFoodTypes(foodTypes);
+        restaurant.setCategoryTypes(categoryTypes);
+        if (updatedLocation != null) {
+            restaurant.setLatitude(updatedLocation.getLatitude());
+            restaurant.setLongitude(updatedLocation.getLongitude());
+        }
     }
 
     private void configRestaurantImage(Context context) {
@@ -76,12 +105,12 @@ public class EditRestaurantActivity extends AppCompatActivity {
     }
 
     private void generateTypes(Context context) {
-        mcbRestaurantTypes = new CheckBox[RestaurantManager.restaurantTypes.length];
+        mcbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
         int i = 0;
-        for (String restaurantType : RestaurantManager.restaurantTypes) {
+        for (String restaurantType : RestaurantManager.foodTypes) {
             CheckBox checkBox = new CheckBox(context);
             checkBox.setText(restaurantType);
-            mRestaurantTypesLayout.addView(mcbRestaurantTypes[i++] = checkBox);
+            mFoodTypesLayout.addView(mcbFoodTypes[i++] = checkBox);
         }
         mcbCategoryTypes = new CheckBox[RestaurantManager.categoryTypes.length];
         i = 0;
@@ -104,7 +133,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SET_LOCATION_REQUEST_CODE && resultCode == RESULT_OK) {
-            Location updatedLocation = (Location) data.getExtras().get("restaurantLocation");
+            updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
