@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -43,13 +44,6 @@
                 android:layout_toEndOf="@+id/resPhoto"
                 android:text="TextView" />
 
-            <Button
-                android:id="@+id/resViewButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/resInfo"
-                android:layout_alignParentEnd="true"
-                android:text="view" />
         </RelativeLayout>
 
     </LinearLayout>
