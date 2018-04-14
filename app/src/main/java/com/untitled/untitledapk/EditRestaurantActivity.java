@@ -2,6 +2,7 @@ package com.untitled.untitledapk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 public class EditRestaurantActivity extends AppCompatActivity {
+
+    private static final int SET_LOCATION_REQUEST_CODE = 34;
 
     private Button mSetLocationButton;
     private TextInputEditText mRestaurantNameField;
@@ -39,20 +42,15 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mCategoryTypes = findViewById(R.id.category_types_layout);
         mEditRestaurant = findViewById(R.id.edit_restaurant_layout);
 
-        restaurant = (Restaurant)getIntent().getExtras().get("restaurant");
+        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
 
         addRestaurantImage(context);
         generateTypes(context);
-        mSetLocationButton.setOnClickListener(v -> setLocation());
+        mSetLocationButton.setOnClickListener(v -> setLocationButtonClicked());
+        modifyLocation();
 
         mRestaurantNameField.setText(restaurant.getName());
         mRestaurantDescriptionField.setText(restaurant.getDescription());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        modifyLocation();
     }
 
     private void addRestaurantImage(Context context) {
@@ -63,7 +61,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mEditRestaurant.addView(imageView, 0);
     }
 
-    private void generateTypes(Context context){
+    private void generateTypes(Context context) {
         mcbRestaurantTypes = new CheckBox[RestaurantManager.restaurantTypes.length];
         int i = 0;
         for (String restaurantType : RestaurantManager.restaurantTypes) {
@@ -84,9 +82,18 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mSetLocationButton.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
     }
 
-    private void setLocation() {
+    private void setLocationButtonClicked() {
         Intent intent = new Intent(this, RestaurantLocationActivity.class);
         intent.putExtra("restaurant", restaurant);
-        startActivity(intent);
+        startActivityForResult(intent, SET_LOCATION_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SET_LOCATION_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Location updatedLocation = (Location) data.getExtras().get("restaurantLocation");
+                mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
+            }
+        }
     }
 }

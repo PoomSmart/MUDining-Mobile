@@ -18,6 +18,7 @@ package com.untitled.untitledapk;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -100,6 +101,9 @@ public class RestaurantLocationActivity extends AppCompatActivity
             restaurant.setLatitude(lastLocation.getLatitude());
             restaurant.setLongitude(lastLocation.getLongitude());
             new UpdateDatabasesTask().execute(getApplicationContext(), restaurant);
+            Intent intent = new Intent();
+            intent.putExtra("restaurantLocation", lastLocation);
+            setResult(RESULT_OK, intent);
         }
         finish();
     }
