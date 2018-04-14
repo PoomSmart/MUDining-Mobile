@@ -54,7 +54,6 @@
         <activity
             android:name=".RecommendListActivity"
             android:label="@string/app_name"></activity>
-        <activity android:name=".RecommendActivity"></activity>
     </application>
 
 </manifest>
