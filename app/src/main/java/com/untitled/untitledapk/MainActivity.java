@@ -1,33 +1,44 @@
 package com.untitled.untitledapk;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+
+import com.untitled.untitledapk.persistence.Restaurant;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recommend);
 
         DatabaseWorker.work(getApplicationContext());
 
-        tv = findViewById(R.id.tvCenter);
-        ClickListener cl = new ClickListener();
-        tv.setOnClickListener(cl);
+        final Button button = findViewById(R.id.recommendButton);
+        button.setOnClickListener(v -> recommendButtonClicked());
     }
 
-    private class ClickListener implements View.OnClickListener {
+    private void recommendButtonClicked() {
+        new ReadDatabasesTask().execute();
+    }
+
+    private class ReadDatabasesTask extends AsyncTask<Void, Void, Void> {
         @Override
-        public void onClick(View v) {
-            Intent i = new Intent(v.getContext(), RecommendActivity.class);
-            startActivity(i);
+        protected Void doInBackground(Void... voids) {
+            Context context = getApplicationContext();
+            Intent intent = new Intent(context, RecommendListActivity.class);
+            List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
+            // TODO: retain only recommended restaurants
+            intent.putExtra("restaurants", (Serializable) restaurants);
+            startActivity(intent);
+            return null;
         }
     }
 }
