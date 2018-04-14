@@ -17,8 +17,10 @@
 package com.untitled.untitledapk;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -90,13 +92,14 @@ public class RestaurantLocationActivity extends AppCompatActivity
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        restaurant = (Restaurant)getIntent().getExtras().get("restaurant");
+        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
     }
 
     private void setCurrentLocation() {
         if (lastLocation != null) {
             restaurant.setLatitude(lastLocation.getLatitude());
             restaurant.setLongitude(lastLocation.getLongitude());
+            new UpdateDatabasesTask().execute(getApplicationContext(), restaurant);
         }
         finish();
     }
@@ -179,6 +182,16 @@ public class RestaurantLocationActivity extends AppCompatActivity
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    private static class UpdateDatabasesTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            Context context = (Context) params[0];
+            Restaurant restaurant = (Restaurant) params[1];
+            RestaurantManager.insertRestaurant(context, restaurant);
+            return null;
+        }
     }
 
 }
