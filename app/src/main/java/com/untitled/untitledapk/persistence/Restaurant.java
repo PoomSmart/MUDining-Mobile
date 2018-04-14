@@ -22,11 +22,13 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Immutable model class for a Restaurant
  */
 @Entity(tableName = "restaurants")
-public class Restaurant {
+public class Restaurant implements Serializable {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
