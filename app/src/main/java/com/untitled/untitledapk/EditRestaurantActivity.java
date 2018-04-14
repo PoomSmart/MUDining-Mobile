@@ -106,18 +106,22 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private void generateTypes(Context context) {
         mcbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
-        int i = 0;
-        for (String restaurantType : RestaurantManager.foodTypes) {
+        for (int i = 0; i < mcbFoodTypes.length; i++) {
+            String foodType = RestaurantManager.foodTypes[i];
             CheckBox checkBox = new CheckBox(context);
-            checkBox.setText(restaurantType);
-            mFoodTypesLayout.addView(mcbFoodTypes[i++] = checkBox);
+            checkBox.setText(foodType);
+            if ((restaurant.getFoodTypes() & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            mFoodTypesLayout.addView(mcbFoodTypes[i] = checkBox);
         }
         mcbCategoryTypes = new CheckBox[RestaurantManager.categoryTypes.length];
-        i = 0;
-        for (String categoryType : RestaurantManager.categoryTypes) {
+        for (int i = 0; i < mcbCategoryTypes.length; i++) {
+            String categoryType = RestaurantManager.categoryTypes[i];
             CheckBox checkBox = new CheckBox(context);
             checkBox.setText(categoryType);
-            mCategoryTypesLayout.addView(mcbCategoryTypes[i++] = checkBox);
+            if ((restaurant.getCategoryTypes() & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            mCategoryTypesLayout.addView(mcbCategoryTypes[i] = checkBox);
         }
     }
 
