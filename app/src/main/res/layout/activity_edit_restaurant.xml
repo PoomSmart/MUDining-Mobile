@@ -14,6 +14,19 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/restaurant_image_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/change_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:text="@string/change_restaurant_image_text" />
+        </FrameLayout>
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -100,6 +113,7 @@
                 android:layout_weight="1"
                 android:text="@android:string/cancel" />
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

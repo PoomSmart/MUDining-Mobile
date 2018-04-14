@@ -11,5 +11,7 @@
     <string name="location_permission_denied">This application requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Untitled.apk\'.</string>
     <string name="permission_required_toast">Location permission is required for this application.</string>
     <string name="google_maps_key" translatable="false">AIzaSyBeW6-wSErFw_G-9Yvw2GEA52-NTjl4bp8</string>
+
     <string name="save_restaurant_text">Save</string>
+    <string name="change_restaurant_image_text">Change</string>
 </resources>
