@@ -1,10 +1,13 @@
 package com.untitled.untitledapk;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 public class SetPreferenceActivity extends AppCompatActivity {
 
@@ -33,6 +36,11 @@ public class SetPreferenceActivity extends AppCompatActivity {
         cbCategory2 = findViewById(R.id.cbCategory2);
         cbCategory3 = findViewById(R.id.cbCategory3);
         cbCategory4 = findViewById(R.id.cbCategory4);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setPreferenceCheckBox();
     }
 
@@ -65,6 +73,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
         prefEditor.putInt("FoodTypes", foodTypePref);
         prefEditor.putInt("CategoryTypes", categoryPref);
         prefEditor.apply();
+        Toast.makeText(this, "Preferences saved!", Toast.LENGTH_SHORT).show();
     }
 
     public void setPreferenceCheckBox() {
@@ -87,7 +96,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
             cbFoodType1.setChecked(true);
         }
 
-        categoryPref = sharedPref.getInt("CategotyTypes", 0);
+        categoryPref = sharedPref.getInt("CategoryTypes", 0);
         if (categoryPref >= 8) {
             categoryPref -= 8;
             cbCategory4.setChecked(true);
@@ -104,5 +113,6 @@ public class SetPreferenceActivity extends AppCompatActivity {
             categoryPref -= 1;
             cbCategory1.setChecked(true);
         }
+        Toast.makeText(this, "Preferences loaded!", Toast.LENGTH_SHORT).show();
     }
 }
