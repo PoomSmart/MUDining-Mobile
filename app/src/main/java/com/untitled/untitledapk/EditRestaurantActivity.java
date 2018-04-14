@@ -66,6 +66,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mRestaurantImageView = new ImageView(context);
         mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(context, restaurant.getId()));
         mRestaurantImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mRestaurantImageView.setMaxHeight(600);
         mRestaurantImageView.setAdjustViewBounds(true);
         mChangeImageButton.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
