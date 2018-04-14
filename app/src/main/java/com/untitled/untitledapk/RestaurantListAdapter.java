@@ -24,9 +24,18 @@ public class RestaurantListAdapter extends ArrayAdapter<String> {
     private final Activity context;
 
     public RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
-        super(context, R.layout.listview_layout);
+        super(context, R.layout.listview_layout, getRestaurantNames(restaurants));
         this.context = context;
         this.restaurants = restaurants;
+    }
+
+    private static String[] getRestaurantNames(List<Restaurant> restaurants) {
+        String[] names = new String[restaurants.size()];
+        int i = 0;
+        for (Restaurant restaurant : restaurants) {
+            names[i++] = restaurant.getName();
+        }
+        return names;
     }
 
     @NonNull
