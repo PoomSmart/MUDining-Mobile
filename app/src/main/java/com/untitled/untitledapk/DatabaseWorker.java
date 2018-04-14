@@ -38,6 +38,11 @@ public class DatabaseWorker {
         return file.exists();
     }
 
+    private static boolean isDatabaseSet(Context context) {
+        File file = new File(context.getFilesDir(), "dbset");
+        return file.exists();
+    }
+
     private static void writeFile(File file, String data) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -68,9 +73,7 @@ public class DatabaseWorker {
         IS.close();
     }
 
-    private static boolean copyDefaultImages(Context context) {
-        if (isDefaultImagesCopied(context))
-            return false;
+    private static void copyDefaultImages(Context context) {
         AssetManager assetManager = context.getAssets();
         String assetPath = RestaurantImageManager.imageFolder;
         File internalStorage = context.getFilesDir();
@@ -87,7 +90,15 @@ public class DatabaseWorker {
             e.printStackTrace();
         }
         writeFile(new File(internalStorage, "copied"), "");
-        return true;
+    }
+
+    public static void work(Context context) {
+        if (!isDefaultImagesCopied(context))
+            copyDefaultImages(context);
+        if (!isDatabaseSet(context)) {
+            new PopulateDatabasesTask().execute(context);
+            writeFile(new File(context.getFilesDir(), "dbset"), "");
+        }
     }
 
     private static class PopulateDatabasesTask extends AsyncTask<Context, Void, Void> {
@@ -98,10 +109,5 @@ public class DatabaseWorker {
             populateRestaurantImages(context);
             return null;
         }
-    }
-
-    public static void work(Context context) {
-        if (copyDefaultImages(context))
-            new PopulateDatabasesTask().execute(context);
     }
 }
