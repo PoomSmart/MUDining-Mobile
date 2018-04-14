@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.untitled.untitledapk.persistence.Restaurant;
+
 public class EditRestaurantActivity extends AppCompatActivity {
 
     private Button mSetLocationButton;
@@ -22,6 +24,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private LinearLayout mCategoryTypes;
     private CheckBox[] mcbRestaurantTypes;
     private CheckBox[] mcbCategoryTypes;
+
+    private Restaurant restaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +41,25 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mCategoryTypes = findViewById(R.id.category_types_layout);
         mEditRestaurant = findViewById(R.id.edit_restaurant_layout);
 
+        restaurant = (Restaurant)getIntent().getExtras().get("restaurant");
+
         addRestaurantImage(context);
         generateTypes(context);
         mSetLocationButton.setOnClickListener(v -> setLocation());
 
-        mRestaurantNameField.setText(getIntent().getStringExtra("restaurantName"));
-        mRestaurantDescriptionField.setText(getIntent().getStringExtra("restaurantDescription"));
+        mRestaurantNameField.setText(restaurant.getName());
+        mRestaurantDescriptionField.setText(restaurant.getDescription());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        modifyLocation();
     }
 
     private void addRestaurantImage(Context context) {
         ImageView imageView = new ImageView(context);
-        imageView.setImageBitmap(RestaurantImageManager.getImage(context, getIntent().getExtras().getInt("restaurantId")));
+        imageView.setImageBitmap(RestaurantImageManager.getImage(context, restaurant.getId()));
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         imageView.setAdjustViewBounds(true);
         mEditRestaurant.addView(imageView, 0);
@@ -70,7 +82,13 @@ public class EditRestaurantActivity extends AppCompatActivity {
         }
     }
 
+    private void modifyLocation() {
+        mSetLocationButton.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
+    }
+
     private void setLocation() {
-        startActivity(new Intent(this, RestaurantLocationActivity.class));
+        Intent intent = new Intent(this, RestaurantLocationActivity.class);
+        intent.putExtra("restaurant", restaurant);
+        startActivity(intent);
     }
 }

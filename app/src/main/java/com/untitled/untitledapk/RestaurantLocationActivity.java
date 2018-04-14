@@ -37,6 +37,7 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.untitled.untitledapk.persistence.Restaurant;
 
 /**
  * This demo shows how GMS Location can be used to check for changes to the users location.  The
@@ -70,6 +71,8 @@ public class RestaurantLocationActivity extends AppCompatActivity
     private Button mSetLocationButton;
     private Button mCancelButton;
 
+    private Restaurant restaurant;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +89,14 @@ public class RestaurantLocationActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        restaurant = (Restaurant)getIntent().getExtras().get("restaurant");
     }
 
     private void setCurrentLocation() {
         if (lastLocation != null) {
-            // TODO: save location to database
+            restaurant.setLatitude(lastLocation.getLatitude());
+            restaurant.setLongitude(lastLocation.getLongitude());
         }
         finish();
     }
