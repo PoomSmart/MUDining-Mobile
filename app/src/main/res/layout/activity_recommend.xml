@@ -7,7 +7,7 @@
     tools:context="com.untitled.untitledapk.RecommendActivity">
 
     <Button
-        android:id="@+id/rec"
+        android:id="@+id/recommendButton"
         android:layout_width="175dp"
         android:layout_height="95dp"
         android:layout_marginBottom="8dp"

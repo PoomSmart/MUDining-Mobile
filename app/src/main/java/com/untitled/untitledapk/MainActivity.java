@@ -1,5 +1,6 @@
 package com.untitled.untitledapk;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private class ClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent i = new Intent(v.getContext(), SetPreferenceActivity.class);
+            Intent i = new Intent(v.getContext(), RecommendActivity.class);
             startActivity(i);
         }
     }
