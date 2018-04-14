@@ -2,7 +2,7 @@
     <string name="app_name">Untitled.apk</string>
     <string name="restaurant_name_placeholder">Restaurant Name</string>
     <string name="restaurant_description_placeholder">Restaurant Description</string>
-    <string name="restaurant_types">Restaurant Types</string>
+    <string name="food_types">Food Types</string>
     <string name="category_types">Categories</string>
     <string name="set_location_text">Set Location</string>
 

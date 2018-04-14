@@ -62,7 +62,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/restaurant_types_layout"
+                android:id="@+id/food_types_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/restaurant_types" />
+                    android:text="@string/food_types" />
 
             </LinearLayout>
 

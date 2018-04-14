@@ -10,7 +10,7 @@ import io.reactivex.Flowable;
 
 public class RestaurantManager {
 
-    public static String[] restaurantTypes = {"Type1", "Type2", "Type3"};
+    public static String[] foodTypes = {"Type1", "Type2", "Type3"};
     public static String[] categoryTypes = {"Category1", "Category2", "Category3"};
     private static RestaurantDao restaurantDao = null;
 

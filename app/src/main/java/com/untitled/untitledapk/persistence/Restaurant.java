@@ -79,6 +79,10 @@ public class Restaurant implements Serializable {
         return mName;
     }
 
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
     public Double getLatitude() {
         return mLatitude;
     }
