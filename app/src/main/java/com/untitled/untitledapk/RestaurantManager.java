@@ -6,11 +6,13 @@ import com.untitled.untitledapk.persistence.Restaurant;
 import com.untitled.untitledapk.persistence.RestaurantDao;
 import com.untitled.untitledapk.persistence.RestaurantsDatabase;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 
 public class RestaurantManager {
 
-    public static String[] restaurantTypes = {"Type1", "Type2", "Type3"};
+    public static String[] foodTypes = {"Type1", "Type2", "Type3"};
     public static String[] categoryTypes = {"Category1", "Category2", "Category3"};
     private static RestaurantDao restaurantDao = null;
 
@@ -25,6 +27,10 @@ public class RestaurantManager {
     public static Restaurant restaurantById(Context context, Integer restaurantId) {
         Flowable<Restaurant> restaurant = getRestaurantDao(context).getRestaurant(restaurantId);
         return restaurant.blockingFirst();
+    }
+
+    public static List<Restaurant> getRestaurants(Context context) {
+        return getRestaurantDao(context).getRestaurants();
     }
 
     public static void deleteRestaurant(Context context, Integer restaurantId) {
