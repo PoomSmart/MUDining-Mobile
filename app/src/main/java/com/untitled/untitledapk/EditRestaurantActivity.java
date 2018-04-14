@@ -3,6 +3,7 @@ package com.untitled.untitledapk;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -37,6 +38,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private Restaurant restaurant;
     private Location updatedLocation;
+
+    private boolean imageChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,9 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLatitude(updatedLocation.getLatitude());
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
+        if (imageChanged)
+            RestaurantImageManager.saveImage(getApplicationContext(), restaurant.getId(), ((BitmapDrawable)mRestaurantImageView.getDrawable()).getBitmap());
+        RestaurantManager.insertRestaurant(getApplicationContext(), restaurant);
     }
 
     private void configRestaurantImage(Context context) {
@@ -140,6 +146,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            imageChanged = true;
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mRestaurantImageView.setImageBitmap(photo);
         }
