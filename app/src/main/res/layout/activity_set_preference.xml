@@ -14,6 +14,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/set_pref_food_types_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".50"
@@ -25,32 +26,10 @@
                 android:layout_height="48dp"
                 android:text="Food Type" />
 
-            <CheckBox
-                android:id="@+id/cbFoodType1"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Food Type1" />
-
-            <CheckBox
-                android:id="@+id/cbFoodType2"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Food Type 2" />
-
-            <CheckBox
-                android:id="@+id/cbFoodType3"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Food Type 3" />
-
-            <CheckBox
-                android:id="@+id/cbFoodType4"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Food Type 4" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/set_pref_categories_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".50"
@@ -62,29 +41,6 @@
                 android:layout_height="48dp"
                 android:text="Category" />
 
-            <CheckBox
-                android:id="@+id/cbCategory1"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Category 1" />
-
-            <CheckBox
-                android:id="@+id/cbCategory2"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Category 2" />
-
-            <CheckBox
-                android:id="@+id/cbCategory3"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Category 3" />
-
-            <CheckBox
-                android:id="@+id/cbCategory4"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Category 4" />
         </LinearLayout>
 
     </LinearLayout>
