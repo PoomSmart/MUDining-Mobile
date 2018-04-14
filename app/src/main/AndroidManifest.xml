@@ -55,10 +55,9 @@
         <activity
             android:name=".RecommendListActivity"
             android:label="@string/app_name" />
-        <activity android:name=".RecommendActivity" />
         <activity
             android:name=".SearchActivity"
-            android:label="Search Restaurant" />
+            android:label="Search" />
         <activity android:name=".ViewRestaurantActivity"></activity>
     </application>
 
