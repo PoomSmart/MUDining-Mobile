@@ -27,7 +27,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
-        categoryPref = sharedPref.getInt("CategotyTypes", 0);
+        categoryPref = sharedPref.getInt("CategoryTypes", 0);
 
         float dpf = context.getResources().getDisplayMetrics().density;
 
@@ -96,7 +96,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
             if ((foodTypePref & (1 << i)) != 0)
                 checkBox.setChecked(true);
         }
-        categoryPref = sharedPref.getInt("CategotyTypes", 0);
+        categoryPref = sharedPref.getInt("CategoryTypes", 0);
         for (int i = 0; i < cbCategories.length; i++) {
             CheckBox checkBox = cbCategories[i];
             if ((categoryPref & (1 << i)) != 0)
