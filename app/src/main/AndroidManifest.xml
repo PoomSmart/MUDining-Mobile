@@ -51,6 +51,10 @@
         </activity>
         <activity android:name=".EditRestaurantActivity" />
         <activity android:name=".RestaurantLocationActivity"></activity>
+        <activity
+            android:name=".RecommendListActivity"
+            android:label="@string/app_name"></activity>
+        <activity android:name=".RecommendActivity"></activity>
     </application>
 
 </manifest>
