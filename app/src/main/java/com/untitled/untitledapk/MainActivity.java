@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
-        DrawerUtils.getDrawer(this, toolBar);
+        DrawerUtils.getDrawer(this, toolBar, R.string.nav_home);
 
         DatabaseWorker.work(getApplicationContext());
 

@@ -3,19 +3,15 @@ package com.untitled.untitledapk;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.support.v7.widget.SearchView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,7 +36,7 @@ public class SearchActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
-        DrawerUtils.getDrawer(this, toolBar);
+        DrawerUtils.getDrawer(this, toolBar, R.string.nav_search);
 
         // Need restaurants list as intent extras from previous activity
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
@@ -60,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public boolean onQueryTextChange (String newText) {
+                    public boolean onQueryTextChange(String newText) {
                         (SearchActivity.this).restaurantListAdapter.getFilter().filter(newText);
                         return false;
                     }
