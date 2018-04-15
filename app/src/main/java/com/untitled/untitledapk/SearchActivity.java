@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // Need restaurants list as intent extras from previous activity
 
-        restaurants = new ArrayList<Restaurant>();
+        restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
         restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
         restaurantList.setAdapter(restaurantListAdapter);
         new ReadDatabasesTask().execute();
@@ -103,20 +103,5 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         return true;
-    }
-
-    private void readDatabasesTask() {
-        restaurants.addAll(RestaurantManager.getRestaurants(this));
-        restaurantListAdapter.notifyDataSetChanged();
-    }
-
-    private class ReadDatabasesTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Context context = getApplicationContext();
-            restaurants = RestaurantManager.getRestaurants(context);
-            restaurantListAdapter.notifyDataSetChanged();
-            return null;
-        }
     }
 }
