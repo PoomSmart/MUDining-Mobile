@@ -14,4 +14,12 @@
 
     <string name="save_restaurant_text">Save</string>
     <string name="change_restaurant_image_text">Change</string>
+    <string name="recommend_button_text">Recommend</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_restaurants">Restaurants</string>
+    <string name="nav_preferences">Preferences</string>
+    <string name="nav_contact">Contact Us</string>
 </resources>
