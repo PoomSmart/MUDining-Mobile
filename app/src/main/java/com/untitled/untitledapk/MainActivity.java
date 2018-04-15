@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     return true;
                 case R.id.nav_search:
-                    startActivity(new Intent(this, SearchActivity.class));
+                    new ReadDatabasesTask().execute();
                     return true;
                 case R.id.nav_preferences:
                     startActivity(new Intent(this, SetPreferenceActivity.class));
