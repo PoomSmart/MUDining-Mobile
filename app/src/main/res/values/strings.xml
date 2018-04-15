@@ -14,13 +14,4 @@
 
     <string name="save_restaurant_text">Save</string>
     <string name="change_restaurant_image_text">Change</string>
-
-    <!-- Navigation -->
-    <string name="nav_home">Home</string>
-    <string name="nav_search">Search</string>
-    <string name="nav_restaurants">Restaurants</string>
-    <string name="nav_preferences">Preferences</string>
-    <string name="nav_contact">Contact Us</string>
-    <string name="nav_drawer_open">Open Navigation Menu</string>
-    <string name="nav_drawer_close">Navigation Close</string>
 </resources>
