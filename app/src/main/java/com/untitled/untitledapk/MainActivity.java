@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     return true;
                 case R.id.nav_search:
-                    new ReadDatabasesTask().execute();
+                    startActivity(new Intent(this, SearchActivity.class));
                     return true;
                 case R.id.nav_preferences:
                     startActivity(new Intent(this, SetPreferenceActivity.class));
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Context context = getApplicationContext();
-            Intent intent = new Intent(context, SearchActivity.class);
+            Intent intent = new Intent(context, RecommendListActivity.class);
             List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
             // TODO: retain only recommended restaurants
             intent.putExtra("restaurants", (Serializable) restaurants);

@@ -1,6 +1,8 @@
 package com.untitled.untitledapk;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +20,8 @@ import android.widget.ListView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -62,9 +66,11 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         // Need restaurants list as intent extras from previous activity
-        restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
+
+        restaurants = new ArrayList<Restaurant>();
         restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
         restaurantList.setAdapter(restaurantListAdapter);
+        new ReadDatabasesTask().execute();
         textQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,5 +103,20 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         return true;
+    }
+
+    private void readDatabasesTask() {
+        restaurants.addAll(RestaurantManager.getRestaurants(this));
+        restaurantListAdapter.notifyDataSetChanged();
+    }
+
+    private class ReadDatabasesTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Context context = getApplicationContext();
+            restaurants = RestaurantManager.getRestaurants(context);
+            restaurantListAdapter.notifyDataSetChanged();
+            return null;
+        }
     }
 }
