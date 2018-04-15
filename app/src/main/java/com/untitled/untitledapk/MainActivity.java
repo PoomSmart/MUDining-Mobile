@@ -1,6 +1,5 @@
 package com.untitled.untitledapk;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Context context = getApplicationContext();
-            Intent intent = new Intent(context, SearchActivity.class);
+            Intent intent = new Intent(context, RecommendListActivity.class);
             List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
             // TODO: retain only recommended restaurants
             intent.putExtra("restaurants", (Serializable) restaurants);
