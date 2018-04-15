@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_home:
                     startActivity(new Intent(this, MainActivity.class));
                     return true;
+                case R.id.nav_search:
+                    startActivity(new Intent(this, SearchActivity.class));
+                    return true;
                 case R.id.nav_preferences:
                     startActivity(new Intent(this, SetPreferenceActivity.class));
                     return true;
