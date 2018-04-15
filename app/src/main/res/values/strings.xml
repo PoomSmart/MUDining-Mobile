@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Untitled.apk</string>
+    <string name="app_name">MUDining</string>
     <string name="restaurant_name_placeholder">Restaurant Name</string>
     <string name="restaurant_description_placeholder">Restaurant Description</string>
     <string name="food_types">Food Types</string>

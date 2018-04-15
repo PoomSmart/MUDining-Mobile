@@ -27,6 +27,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -62,13 +63,16 @@ public class RestaurantLocationActivity extends AppCompatActivity
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationClient;
+
     private Location lastLocation;
+    private Location specifiedLocation;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
+    private boolean editable;
     private GoogleMap mMap;
 
     private Button mSetLocationButton;
@@ -81,19 +85,34 @@ public class RestaurantLocationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_location);
 
+        editable = getIntent().getBooleanExtra("editable", true);
+        specifiedLocation = (Location) getIntent().getExtras().get("location");
+
         mSetLocationButton = findViewById(R.id.map_set_location_button);
         mCancelButton = findViewById(R.id.map_cancel_button);
 
-        mSetLocationButton.setOnClickListener(v -> setCurrentLocation());
-        mCancelButton.setOnClickListener(v -> finish());
+        if (editable) {
+            mSetLocationButton.setOnClickListener(v -> setCurrentLocation());
+            mCancelButton.setOnClickListener(v -> finish());
+        } else {
+            mSetLocationButton.setVisibility(View.INVISIBLE);
+            mCancelButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (specifiedLocation == null)
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
+    }
+
+    private void animateToLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        mMap.animateCamera(cameraUpdate);
     }
 
     private void setCurrentLocation() {
@@ -112,10 +131,12 @@ public class RestaurantLocationActivity extends AppCompatActivity
     public void onMapReady(GoogleMap map) {
         mMap = map;
 
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
-        enableMyLocation();
-
+        if (specifiedLocation == null) {
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
+            enableMyLocation();
+        } else
+            animateToLocation(specifiedLocation);
     }
 
     /**
@@ -134,10 +155,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
                     .addOnSuccessListener(this, location -> {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            lastLocation = location;
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
-                            mMap.animateCamera(cameraUpdate);
+                            animateToLocation(lastLocation = location);
                         }
                     });
         }
