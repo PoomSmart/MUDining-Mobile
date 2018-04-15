@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,13 +52,13 @@ public class ViewRestaurantActivity extends AppCompatActivity {
             if ((restaurant.getFoodTypes() & (1 << i)) != 0)
                 foodTypes.add(RestaurantManager.foodTypes[i]);
         }
-        mRestaurantFoodTypesTextView.setText(foodTypes.toString());
+        mRestaurantFoodTypesTextView.setText("Types: " + TextUtils.join(", ", foodTypes));
         List<String> categories = new ArrayList<>();
         for (int i = 0; i < RestaurantManager.categoryTypes.length; i++) {
             if ((restaurant.getCategoryTypes() & (1 << i)) != 0)
                 categories.add(RestaurantManager.categoryTypes[i]);
         }
-        mRestaurantCategoriesTextView.setText(categories.toString());
+        mRestaurantCategoriesTextView.setText("Categories: " + TextUtils.join(", ", categories));
         mRestaurantLocationTextView.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
         mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
     }

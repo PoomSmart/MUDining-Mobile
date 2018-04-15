@@ -58,7 +58,7 @@
         <activity
             android:name=".SearchActivity"
             android:label="Search" />
-        <activity android:name=".ViewRestaurantActivity"></activity>
+        <activity android:name=".ViewRestaurantActivity" />
     </application>
 
 </manifest>
