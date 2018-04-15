@@ -1,13 +1,20 @@
 package com.untitled.untitledapk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.untitled.untitledapk.persistence.Restaurant;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class DrawerUtils {
+
     public static void getDrawer(final Activity activity, Toolbar toolbar) {
         PrimaryDrawerItem drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
                 .withName(R.string.nav_home).withIcon(R.drawable.ic_home);
@@ -35,7 +42,7 @@ public class DrawerUtils {
                                 view.getContext().startActivity(new Intent(activity, MainActivity.class));
                             return true;
                         case 2:
-                            view.getContext().startActivity(new Intent(activity, SearchActivity.class));
+                            new ReadDatabaseTask().execute(view.getContext(), activity);
                             return true;
                         case 4:
                             view.getContext().startActivity(new Intent(activity, SetPreferenceActivity.class));
@@ -44,5 +51,18 @@ public class DrawerUtils {
                             return true;
                     }
                 }).build();
+    }
+
+    private static class ReadDatabaseTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            Context context = (Context) params[0];
+            Context from = (Context) params[1];
+            Intent intent = new Intent(from, SearchActivity.class);
+            List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
+            intent.putExtra("restaurants", (Serializable) restaurants);
+            context.startActivity(intent);
+            return null;
+        }
     }
 }
