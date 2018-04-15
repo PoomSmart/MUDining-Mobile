@@ -47,11 +47,12 @@ public class EditRestaurantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_restaurant);
 
-        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
-        if (restaurant == null) {
+        Intent intent = getIntent();
+        if (!intent.hasExtra("restaurant")) {
             // Editing such null restaurant is impossible
             finish();
         }
+        restaurant = (Restaurant) intent.getExtras().get("restaurant");
 
         Context context = getApplicationContext();
 
