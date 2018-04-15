@@ -21,7 +21,6 @@ public class SetPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_preference);
 
-        Context context = getApplicationContext();
         LinearLayout foodTypesLayout = findViewById(R.id.set_pref_food_types_layout);
         LinearLayout categoriesLayout = findViewById(R.id.set_pref_categories_layout);
 
@@ -29,12 +28,12 @@ public class SetPreferenceActivity extends AppCompatActivity {
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
 
-        float dpf = context.getResources().getDisplayMetrics().density;
+        float dpf = getResources().getDisplayMetrics().density;
 
         cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
         for (int i = 0; i < cbFoodTypes.length; i++) {
             String foodType = RestaurantManager.foodTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(foodType);
             checkBox.setHeight((int) (48 * dpf));
             if ((foodTypePref & (1 << i)) != 0)
@@ -44,7 +43,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
         cbCategories = new CheckBox[RestaurantManager.categoryTypes.length];
         for (int i = 0; i < cbCategories.length; i++) {
             String categoryType = RestaurantManager.categoryTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(categoryType);
             checkBox.setHeight((int) (48 * dpf));
             if ((categoryPref & (1 << i)) != 0)

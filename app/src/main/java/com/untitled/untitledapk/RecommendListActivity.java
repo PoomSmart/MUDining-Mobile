@@ -12,12 +12,12 @@ import java.util.List;
 
 public class RecommendListActivity extends AppCompatActivity {
 
-    private ListView listView;
+    ListView listView;
     private List<Restaurant> restaurants;
 
     private AdapterView.OnItemClickListener listener = (parent, view, position, id) -> {
         Restaurant restaurant = restaurants.get(position);
-        Intent intent = new Intent(getApplicationContext(), ViewRestaurantActivity.class);
+        Intent intent = new Intent(this, ViewRestaurantActivity.class);
         intent.putExtra("restaurant", restaurant);
         startActivity(intent);
     };

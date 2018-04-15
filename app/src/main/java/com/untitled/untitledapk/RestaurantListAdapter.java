@@ -24,7 +24,7 @@ public class RestaurantListAdapter extends ArrayAdapter<String> {
     private final List<Restaurant> restaurants;
     private final Activity context;
 
-    public RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
+    RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
         super(context, R.layout.listview_layout, getRestaurantNames(restaurants));
         this.context = context;
         this.restaurants = restaurants;
@@ -64,7 +64,7 @@ public class RestaurantListAdapter extends ArrayAdapter<String> {
         private TextView restInfo;
         private ImageView resPhoto;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             resName = v.findViewById(R.id.resName);
             restInfo = v.findViewById(R.id.resInfo);
             resPhoto = v.findViewById(R.id.resPhoto);

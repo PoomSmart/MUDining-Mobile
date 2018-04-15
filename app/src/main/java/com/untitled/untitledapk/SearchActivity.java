@@ -22,8 +22,8 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     public Toolbar toolBar;
 
-    private ListView restaurantList;
-    private List<Restaurant> restaurants;
+    ListView restaurantList;
+    List<Restaurant> restaurants;
     private EditText textQuery;
     private RestaurantListAdapter restaurantListAdapter;
 

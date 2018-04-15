@@ -72,11 +72,11 @@ public class RestaurantLocationActivity extends AppCompatActivity
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
-    private boolean editable;
+    boolean editable;
     private GoogleMap mMap;
 
-    private Button mSetLocationButton;
-    private Button mCancelButton;
+    Button mSetLocationButton;
+    Button mCancelButton;
 
     private Restaurant restaurant;
 
@@ -124,7 +124,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
         if (lastLocation != null) {
             restaurant.setLatitude(lastLocation.getLatitude());
             restaurant.setLongitude(lastLocation.getLongitude());
-            new UpdateDatabasesTask().execute(getApplicationContext(), restaurant);
+            new UpdateDatabasesTask().execute(this, restaurant);
             Intent intent = new Intent();
             intent.putExtra("restaurantLocation", lastLocation);
             setResult(RESULT_OK, intent);

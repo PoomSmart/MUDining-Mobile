@@ -12,7 +12,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 public class DrawerUtils {
@@ -49,7 +48,12 @@ public class DrawerUtils {
             drawer.addItem(new PrimaryDrawerItem().withIdentifier(i)
                     .withName(names[i]).withIcon(icons[i]));
         }
-        drawer.setSelection(Arrays.asList(names).indexOf(name));
+        for (int i = 0; i < names.length; i++) {
+            if (names[i] == name) {
+                drawer.setSelection(i);
+                break;
+            }
+        }
     }
 
     private static class ReadDatabaseTask extends AsyncTask<Object, Void, Void> {

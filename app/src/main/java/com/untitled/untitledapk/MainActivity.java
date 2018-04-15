@@ -30,20 +30,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolBar);
         DrawerUtils.getDrawer(this, toolBar, R.string.nav_home);
 
-        DatabaseWorker.work(getApplicationContext());
+        DatabaseWorker.work(this);
 
         final Button button = findViewById(R.id.recommend_button);
         button.setOnClickListener(v -> recommendButtonClicked());
     }
 
     private void recommendButtonClicked() {
-        new ReadDatabasesTask().execute();
+        new ReadDatabasesTask().execute(this);
     }
 
-    private class ReadDatabasesTask extends AsyncTask<Void, Void, Void> {
+    private class ReadDatabasesTask extends AsyncTask<Object, Void, Void> {
         @Override
-        protected Void doInBackground(Void... voids) {
-            Context context = getApplicationContext();
+        protected Void doInBackground(Object... params) {
+            Context context = (Context) params[0];
             Intent intent = new Intent(context, RecommendListActivity.class);
             List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
             // TODO: retain only recommended restaurants
