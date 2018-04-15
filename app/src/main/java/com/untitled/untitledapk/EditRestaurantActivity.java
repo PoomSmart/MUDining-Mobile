@@ -98,7 +98,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
         new EditDatabasesTask().execute(restaurant, imageChanged ? ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap() : null);
-        finish();
     }
 
     private void configRestaurantImage(Context context) {
@@ -164,6 +163,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             RestaurantManager.insertRestaurant(getApplicationContext(), restaurant);
             if (bitmap != null)
                 RestaurantImageManager.saveImage(getApplicationContext(), restaurant.getId(), bitmap);
+            finish();
             return null;
         }
     }
