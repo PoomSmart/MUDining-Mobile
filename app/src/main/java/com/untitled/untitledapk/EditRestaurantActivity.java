@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
@@ -46,6 +47,12 @@ public class EditRestaurantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_restaurant);
 
+        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
+        if (restaurant == null) {
+            // Editing such null restaurant is impossible
+            finish();
+        }
+
         Context context = getApplicationContext();
 
         mChangeImageButton = findViewById(R.id.change_image_button);
@@ -58,8 +65,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mFoodTypesLayout = findViewById(R.id.food_types_layout);
         mCategoryTypesLayout = findViewById(R.id.category_types_layout);
         mEditRestaurantLayout = findViewById(R.id.edit_restaurant_layout);
-
-        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
 
         configRestaurantImage(context);
         generateTypes(context);
@@ -92,9 +97,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLatitude(updatedLocation.getLatitude());
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
-        if (imageChanged)
-            RestaurantImageManager.saveImage(getApplicationContext(), restaurant.getId(), ((BitmapDrawable)mRestaurantImageView.getDrawable()).getBitmap());
-        RestaurantManager.insertRestaurant(getApplicationContext(), restaurant);
+        new EditDatabasesTask().execute(restaurant, imageChanged ? ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap() : null);
+        finish();
     }
 
     private void configRestaurantImage(Context context) {
@@ -149,6 +153,18 @@ public class EditRestaurantActivity extends AppCompatActivity {
             imageChanged = true;
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mRestaurantImageView.setImageBitmap(photo);
+        }
+    }
+
+    private class EditDatabasesTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            Restaurant restaurant = (Restaurant) params[0];
+            Bitmap bitmap = (Bitmap) params[1];
+            RestaurantManager.insertRestaurant(getApplicationContext(), restaurant);
+            if (bitmap != null)
+                RestaurantImageManager.saveImage(getApplicationContext(), restaurant.getId(), bitmap);
+            return null;
         }
     }
 }
