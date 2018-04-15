@@ -47,13 +47,13 @@ public class ViewRestaurantActivity extends AppCompatActivity {
                 if ((restaurant.getFoodTypes() & (1 << i)) != 0)
                     foodTypes.add(RestaurantManager.foodTypes[i]);
             }
-            mRestaurantFoodTypesTextView.setText(foodTypes.toString());
+            mRestaurantFoodTypesTextView.setText("Types: "+foodTypes.toString());
             List<String> categories = new ArrayList<>();
             for (int i = 0; i < RestaurantManager.categoryTypes.length; i++) {
                 if ((restaurant.getCategoryTypes() & (1 << i)) != 0)
                     categories.add(RestaurantManager.categoryTypes[i]);
             }
-            mRestaurantCategoriesTextView.setText(categories.toString());
+            mRestaurantCategoriesTextView.setText("Categories: "+categories.toString());
             mRestaurantLocationTextView.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
             mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
         } else {
