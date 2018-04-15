@@ -85,8 +85,15 @@ public class RestaurantLocationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_location);
 
-        editable = getIntent().getBooleanExtra("editable", true);
-        specifiedLocation = (Location) getIntent().getExtras().get("location");
+        Intent intent = getIntent();
+        editable = intent.getBooleanExtra("editable", true);
+        if (intent.hasExtra("location"))
+            specifiedLocation = (Location) intent.getExtras().get("location");
+        if (!intent.hasExtra("restaurant")) {
+            // Stop on seeing the null restaurant
+            finish();
+        }
+        restaurant = (Restaurant) intent.getExtras().get("restaurant");
 
         mSetLocationButton = findViewById(R.id.map_set_location_button);
         mCancelButton = findViewById(R.id.map_cancel_button);
@@ -105,8 +112,6 @@ public class RestaurantLocationActivity extends AppCompatActivity
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        restaurant = (Restaurant) getIntent().getExtras().get("restaurant");
     }
 
     private void animateToLocation(Location location) {
