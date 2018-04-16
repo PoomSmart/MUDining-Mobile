@@ -1,5 +1,6 @@
 package com.untitled.untitledapk;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +13,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -22,12 +22,11 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private static final int SET_LOCATION_REQUEST_CODE = 34;
     private static final int CAMERA_REQUEST = 16;
-
-    private ImageView mRestaurantImageView;
     Button mChangeImageButton;
     Button mSetLocationButton;
     Button mSaveRestaurantButton;
     Button mDiscardRestaurantButton;
+    private ImageView mRestaurantImageView;
     private TextInputEditText mRestaurantNameField;
     private TextInputEditText mRestaurantDescriptionField;
     private LinearLayout mEditRestaurantLayout;
@@ -161,8 +160,13 @@ public class EditRestaurantActivity extends AppCompatActivity {
             RestaurantManager.insertRestaurant(context, restaurant);
             if (bitmap != null)
                 RestaurantImageManager.saveImage(context, restaurant.getId(), bitmap);
-            finish();
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setResult(Activity.RESULT_OK);
+            finish();
         }
     }
 }

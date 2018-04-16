@@ -32,7 +32,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        restaurantList = findViewById(R.id.liRestaurant);
+        restaurantList = findViewById(R.id.restaurantList);
 
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);

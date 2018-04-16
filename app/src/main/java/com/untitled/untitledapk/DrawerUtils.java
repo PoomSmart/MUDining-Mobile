@@ -34,7 +34,11 @@ public class DrawerUtils {
                             return true;
                         case 1:
                             if (!(activity instanceof SearchActivity))
-                                new ReadDatabaseTask().execute(view.getContext(), activity);
+                                new ReadDatabaseTask().execute(view.getContext(), activity, SearchActivity.class);
+                            return true;
+                        case 2:
+                            if (!(activity instanceof ManageRestaurantActivity))
+                                new ReadDatabaseTask().execute(view.getContext(), activity, ManageRestaurantActivity.class);
                             return true;
                         case 3:
                             if (!(activity instanceof SetPreferenceActivity))
@@ -61,7 +65,8 @@ public class DrawerUtils {
         protected Void doInBackground(Object... params) {
             Context context = (Context) params[0];
             Context from = (Context) params[1];
-            Intent intent = new Intent(from, SearchActivity.class);
+            Class targetClass = (Class)params[2];
+            Intent intent = new Intent(from, targetClass);
             List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
             intent.putExtra("restaurants", (Serializable) restaurants);
             context.startActivity(intent);
