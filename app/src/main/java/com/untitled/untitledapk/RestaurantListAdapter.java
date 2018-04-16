@@ -3,7 +3,6 @@ package com.untitled.untitledapk;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -28,7 +27,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
 
     private final Activity context;
     private final boolean editable;
-    private final List<Restaurant> restaurants;
+    private List<Restaurant> restaurants;
 
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
         this(context, restaurants, false);
@@ -75,6 +74,10 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             viewHolder.resDelete.setVisibility(View.INVISIBLE);
         }
         return rowView;
+    }
+
+    public void setList(List<Restaurant> restaurants) {
+        this.restaurants = restaurants;
     }
 
     private class RemoveRestaurantTask extends AsyncTask<Object, Void, Void> {

@@ -52,12 +52,19 @@ public class ManageRestaurantActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_RESTAURANT_REQUEST && resultCode == RESULT_OK) {
             if (data.hasExtra("restaurant")) {
-                Restaurant updatedRestaurant = (Restaurant) data.getExtras().get("restaurant");
+                boolean found = false;
+                Restaurant updatedOrNewRestaurant = (Restaurant) data.getExtras().get("restaurant");
                 for (int i = 0; i < restaurants.size(); i++) {
-                    if (restaurants.get(i).getId().equals(updatedRestaurant.getId())) {
-                        restaurants.set(i, updatedRestaurant);
+                    if (restaurants.get(i).getId().equals(updatedOrNewRestaurant.getId())) {
+                        restaurants.set(i, updatedOrNewRestaurant);
+                        found = true;
                         break;
                     }
+                }
+                if (!found) {
+                    // TODO: Added restaurant won't show
+                    restaurants.add(updatedOrNewRestaurant);
+                    restaurantListAdapter.setList(restaurants);
                 }
             }
             restaurantListAdapter.notifyDataSetChanged();

@@ -20,7 +20,7 @@ import com.untitled.untitledapk.persistence.Restaurant;
 
 public class EditRestaurantActivity extends AppCompatActivity {
 
-    private static final int SET_LOCATION_REQUEST_CODE = 34;
+    private static final int SET_LOCATION_REQUEST = 34;
     private static final int CAMERA_REQUEST = 16;
     Button mChangeImageButton;
     Button mSetLocationButton;
@@ -156,11 +156,11 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private void setLocationButtonClicked() {
         Intent intent = new Intent(this, RestaurantLocationActivity.class);
         intent.putExtra("restaurant", restaurant);
-        startActivityForResult(intent, SET_LOCATION_REQUEST_CODE);
+        startActivityForResult(intent, SET_LOCATION_REQUEST);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SET_LOCATION_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == SET_LOCATION_REQUEST && resultCode == RESULT_OK) {
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
@@ -175,7 +175,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             Context context = (Context) params[0];
             Restaurant restaurant = (Restaurant) params[1];
             Bitmap bitmap = (Bitmap) params[2];
-            // TODO: Fix insertion duplication
+            // TODO: Can this be simplified?
             int insertID = (int) RestaurantManager.insertRestaurant(context, restaurant);
             if (restaurant.getId() == null)
                 restaurant.setId(insertID);
@@ -188,8 +188,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             // TODO: Find a better way to update data in real time other than using intent update
             Intent intent = new Intent();
-            if (!createNew)
-                intent.putExtra("restaurant", restaurant);
+            intent.putExtra("restaurant", restaurant);
             setResult(Activity.RESULT_OK, intent);
             finish();
         }

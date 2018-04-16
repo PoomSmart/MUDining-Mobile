@@ -17,11 +17,9 @@
 package com.untitled.untitledapk;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -62,22 +60,18 @@ public class RestaurantLocationActivity extends AppCompatActivity
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    boolean editable;
+    Button mSetLocationButton;
+    Button mCancelButton;
     private FusedLocationProviderClient mFusedLocationClient;
-
     private Location lastLocation;
     private Location specifiedLocation;
-
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
-    boolean editable;
     private GoogleMap mMap;
-
-    Button mSetLocationButton;
-    Button mCancelButton;
-
     private Restaurant restaurant;
 
     @Override
@@ -89,11 +83,8 @@ public class RestaurantLocationActivity extends AppCompatActivity
         editable = intent.getBooleanExtra("editable", true);
         if (intent.hasExtra("location"))
             specifiedLocation = (Location) intent.getExtras().get("location");
-        if (!intent.hasExtra("restaurant")) {
-            // Stop on seeing the null restaurant
-            finish();
-        }
-        restaurant = (Restaurant) intent.getExtras().get("restaurant");
+        if (intent.hasExtra("restaurant"))
+            restaurant = (Restaurant) intent.getExtras().get("restaurant");
 
         mSetLocationButton = findViewById(R.id.map_set_location_button);
         mCancelButton = findViewById(R.id.map_cancel_button);
@@ -122,9 +113,6 @@ public class RestaurantLocationActivity extends AppCompatActivity
 
     private void setCurrentLocation() {
         if (lastLocation != null) {
-            restaurant.setLatitude(lastLocation.getLatitude());
-            restaurant.setLongitude(lastLocation.getLongitude());
-            new UpdateDatabasesTask().execute(this, restaurant);
             Intent intent = new Intent();
             intent.putExtra("restaurantLocation", lastLocation);
             setResult(RESULT_OK, intent);
@@ -209,16 +197,6 @@ public class RestaurantLocationActivity extends AppCompatActivity
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
-    }
-
-    private static class UpdateDatabasesTask extends AsyncTask<Object, Void, Void> {
-        @Override
-        protected Void doInBackground(Object... params) {
-            Context context = (Context) params[0];
-            Restaurant restaurant = (Restaurant) params[1];
-            RestaurantManager.insertRestaurant(context, restaurant);
-            return null;
-        }
     }
 
 }
