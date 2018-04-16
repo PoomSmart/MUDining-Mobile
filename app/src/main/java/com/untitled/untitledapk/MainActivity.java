@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         new ReadDatabasesTask().execute(this);
     }
 
-    private class ReadDatabasesTask extends AsyncTask<Object, Void, Void> {
+    private static class ReadDatabasesTask extends AsyncTask<Object, Void, Void> {
         @Override
         protected Void doInBackground(Object... params) {
             Context context = (Context) params[0];
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             List<Restaurant> restaurants = RestaurantManager.getRestaurants(context);
             // TODO: retain only recommended restaurants
             intent.putExtra("restaurants", (Serializable) restaurants);
-            startActivity(intent);
+            context.startActivity(intent);
             return null;
         }
     }
