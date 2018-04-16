@@ -34,7 +34,8 @@ public class RestaurantImageManager {
         FileOutputStream outputStream;
         String fileName = restaurantId + ".jpg";
         try {
-            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            File file = new File(context.getFilesDir() + File.separator + imageFolder, fileName);
+            outputStream = new FileOutputStream(file);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             outputStream.write(stream.toByteArray());

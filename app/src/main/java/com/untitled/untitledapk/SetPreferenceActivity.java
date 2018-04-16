@@ -4,11 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SetPreferenceActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    public Toolbar toolBar;
 
     private CheckBox[] cbFoodTypes;
     private int foodTypePref = 0;
@@ -20,6 +27,12 @@ public class SetPreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_preference);
+
+        ButterKnife.bind(this);
+        setSupportActionBar(toolBar);
+        DrawerUtils.getDrawer(this, toolBar, R.string.nav_preferences);
+        getSupportActionBar().setTitle(R.string.nav_preferences);
+
         populateCheckBoxList();
     }
 

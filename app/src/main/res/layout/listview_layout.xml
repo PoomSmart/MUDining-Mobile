@@ -44,6 +44,23 @@
                 android:layout_toEndOf="@+id/resPhoto"
                 android:text="TextView" />
 
+            <ImageButton
+                android:id="@+id/resEdit"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@+id/resInfo"
+                android:layout_toStartOf="@+id/resDelete"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <ImageButton
+                android:id="@+id/resDelete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@+id/resInfo"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="17dp"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
         </RelativeLayout>
 
     </LinearLayout>

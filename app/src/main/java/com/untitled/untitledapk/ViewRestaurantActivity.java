@@ -1,7 +1,7 @@
 package com.untitled.untitledapk;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,14 +16,13 @@ import java.util.List;
 
 public class ViewRestaurantActivity extends AppCompatActivity {
 
+    ImageView mRestaurantImageView;
+    TextView mRestaurantNameTextView;
+    TextView mRestaurantDescriptionTextView;
+    TextView mRestaurantFoodTypesTextView;
+    TextView mRestaurantCategoriesTextView;
+    TextView mRestaurantLocationTextView;
     private Restaurant restaurant;
-
-    private ImageView mRestaurantImageView;
-    private TextView mRestaurantNameTextView;
-    private TextView mRestaurantDescriptionTextView;
-    private TextView mRestaurantFoodTypesTextView;
-    private TextView mRestaurantCategoriesTextView;
-    private TextView mRestaurantLocationTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +42,7 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         mRestaurantCategoriesTextView = findViewById(R.id.view_restaurant_categories);
         mRestaurantLocationTextView = findViewById(R.id.view_restaurant_location);
 
-        Context context = getApplicationContext();
-        mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(context, restaurant.getId()));
+        mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(this, restaurant.getId()));
         mRestaurantNameTextView.setText(restaurant.getName());
         mRestaurantDescriptionTextView.setText(restaurant.getDescription());
         List<String> foodTypes = new ArrayList<>();
@@ -60,6 +58,8 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         }
         mRestaurantCategoriesTextView.setText("Categories: " + TextUtils.join(", ", categories));
         mRestaurantLocationTextView.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
+        mRestaurantLocationTextView.setBackgroundColor(Color.GRAY);
+        mRestaurantLocationTextView.setTextColor(Color.WHITE);
         mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
     }
 

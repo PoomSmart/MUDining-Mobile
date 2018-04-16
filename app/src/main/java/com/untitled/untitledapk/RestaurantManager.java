@@ -38,8 +38,8 @@ public class RestaurantManager {
         RestaurantImageManager.removeImage(context, restaurantId);
     }
 
-    public static void insertRestaurant(Context context, Restaurant restaurant) {
-        getRestaurantDao(context).insertRestaurant(restaurant);
+    public static long insertRestaurant(Context context, Restaurant restaurant) {
+        return getRestaurantDao(context).insertRestaurant(restaurant);
     }
 
 }

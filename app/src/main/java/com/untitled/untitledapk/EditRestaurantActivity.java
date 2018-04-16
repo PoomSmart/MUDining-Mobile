@@ -1,5 +1,6 @@
 package com.untitled.untitledapk;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +13,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -20,15 +20,13 @@ import com.untitled.untitledapk.persistence.Restaurant;
 
 public class EditRestaurantActivity extends AppCompatActivity {
 
-    private static final int SET_LOCATION_REQUEST_CODE = 34;
+    private static final int SET_LOCATION_REQUEST = 34;
     private static final int CAMERA_REQUEST = 16;
-
+    Button mChangeImageButton;
+    Button mSetLocationButton;
+    Button mSaveRestaurantButton;
+    Button mDiscardRestaurantButton;
     private ImageView mRestaurantImageView;
-    private FrameLayout mRestaurantImageLayout;
-    private Button mChangeImageButton;
-    private Button mSetLocationButton;
-    private Button mSaveRestaurantButton;
-    private Button mDiscardRestaurantButton;
     private TextInputEditText mRestaurantNameField;
     private TextInputEditText mRestaurantDescriptionField;
     private LinearLayout mEditRestaurantLayout;
@@ -39,7 +37,9 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private Restaurant restaurant;
     private Location updatedLocation;
+    private Bitmap restaurantImage = null;
 
+    private boolean createNew;
     private boolean imageChanged;
 
     @Override
@@ -48,35 +48,44 @@ public class EditRestaurantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_restaurant);
 
         Intent intent = getIntent();
-        if (!intent.hasExtra("restaurant")) {
+        createNew = intent.getBooleanExtra("create", false);
+        if (!intent.hasExtra("restaurant") && !createNew) {
             // Editing such null restaurant is impossible
             finish();
         }
-        restaurant = (Restaurant) intent.getExtras().get("restaurant");
-
-        Context context = getApplicationContext();
+        restaurant = createNew ? new Restaurant() : (Restaurant) intent.getExtras().get("restaurant");
 
         mChangeImageButton = findViewById(R.id.change_image_button);
         mSetLocationButton = findViewById(R.id.set_location_button);
         mSaveRestaurantButton = findViewById(R.id.save_restaurant_button);
         mDiscardRestaurantButton = findViewById(R.id.discard_restaurant_button);
-        mRestaurantImageLayout = findViewById(R.id.restaurant_image_layout);
         mRestaurantNameField = findViewById(R.id.restaurant_name_field);
         mRestaurantDescriptionField = findViewById(R.id.restaurant_description_field);
         mFoodTypesLayout = findViewById(R.id.food_types_layout);
         mCategoryTypesLayout = findViewById(R.id.category_types_layout);
         mEditRestaurantLayout = findViewById(R.id.edit_restaurant_layout);
 
-        configRestaurantImage(context);
-        generateTypes(context);
+        // TODO: Bitmap still won't persist after rotation
+        if (savedInstanceState != null)
+            restaurantImage = savedInstanceState.getParcelable("bitmap");
+        configRestaurantImage();
+        generateTypes();
         mSetLocationButton.setOnClickListener(v -> setLocationButtonClicked());
         modifyLocation();
 
         mSaveRestaurantButton.setOnClickListener(v -> saveRestaurant());
         mDiscardRestaurantButton.setOnClickListener(v -> finish());
 
-        mRestaurantNameField.setText(restaurant.getName());
-        mRestaurantDescriptionField.setText(restaurant.getDescription());
+        if (!createNew) {
+            mRestaurantNameField.setText(restaurant.getName());
+            mRestaurantDescriptionField.setText(restaurant.getDescription());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("bitmap", restaurantImage);
+        super.onSaveInstanceState(outState);
     }
 
     private void saveRestaurant() {
@@ -98,13 +107,18 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLatitude(updatedLocation.getLatitude());
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
-        new EditDatabasesTask().execute(restaurant, imageChanged ? ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap() : null);
+        new EditDatabasesTask().execute(this, restaurant, imageChanged ? ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap() : null);
     }
 
-    private void configRestaurantImage(Context context) {
-        mRestaurantImageView = new ImageView(context);
-        mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(context, restaurant.getId()));
+    private void configRestaurantImage() {
+        mRestaurantImageView = new ImageView(this);
+        if (!createNew) {
+            if (restaurantImage == null)
+                restaurantImage = RestaurantImageManager.getImage(this, restaurant.getId());
+            mRestaurantImageView.setImageBitmap(restaurantImage);
+        }
         mRestaurantImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mRestaurantImageView.setMinimumHeight(600);
         mRestaurantImageView.setMaxHeight(600);
         mRestaurantImageView.setAdjustViewBounds(true);
         mChangeImageButton.setOnClickListener(v -> {
@@ -114,58 +128,69 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mEditRestaurantLayout.addView(mRestaurantImageView, 0);
     }
 
-    private void generateTypes(Context context) {
+    private void generateTypes() {
         mcbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
         for (int i = 0; i < mcbFoodTypes.length; i++) {
             String foodType = RestaurantManager.foodTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(foodType);
-            if ((restaurant.getFoodTypes() & (1 << i)) != 0)
+            if (!createNew && (restaurant.getFoodTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mFoodTypesLayout.addView(mcbFoodTypes[i] = checkBox);
         }
         mcbCategoryTypes = new CheckBox[RestaurantManager.categoryTypes.length];
         for (int i = 0; i < mcbCategoryTypes.length; i++) {
             String categoryType = RestaurantManager.categoryTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(categoryType);
-            if ((restaurant.getCategoryTypes() & (1 << i)) != 0)
+            if (!createNew && (restaurant.getCategoryTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mCategoryTypesLayout.addView(mcbCategoryTypes[i] = checkBox);
         }
     }
 
     private void modifyLocation() {
-        mSetLocationButton.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
+        mSetLocationButton.setText(createNew ? "Set Location" : String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
     }
 
     private void setLocationButtonClicked() {
         Intent intent = new Intent(this, RestaurantLocationActivity.class);
         intent.putExtra("restaurant", restaurant);
-        startActivityForResult(intent, SET_LOCATION_REQUEST_CODE);
+        startActivityForResult(intent, SET_LOCATION_REQUEST);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SET_LOCATION_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == SET_LOCATION_REQUEST && resultCode == RESULT_OK) {
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             imageChanged = true;
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mRestaurantImageView.setImageBitmap(photo);
+            mRestaurantImageView.setImageBitmap(restaurantImage = (Bitmap) data.getExtras().get("data"));
         }
     }
 
     private class EditDatabasesTask extends AsyncTask<Object, Void, Void> {
         @Override
         protected Void doInBackground(Object... params) {
-            Restaurant restaurant = (Restaurant) params[0];
-            Bitmap bitmap = (Bitmap) params[1];
-            RestaurantManager.insertRestaurant(getApplicationContext(), restaurant);
+            Context context = (Context) params[0];
+            Restaurant restaurant = (Restaurant) params[1];
+            Bitmap bitmap = (Bitmap) params[2];
+            // TODO: Can this be simplified?
+            int insertID = (int) RestaurantManager.insertRestaurant(context, restaurant);
+            if (restaurant.getId() == null)
+                restaurant.setId(insertID);
             if (bitmap != null)
-                RestaurantImageManager.saveImage(getApplicationContext(), restaurant.getId(), bitmap);
-            finish();
+                RestaurantImageManager.saveImage(context, restaurant.getId(), bitmap);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // TODO: Find a better way to update data in real time other than using intent update
+            Intent intent = new Intent();
+            intent.putExtra("restaurant", restaurant);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
     }
 }

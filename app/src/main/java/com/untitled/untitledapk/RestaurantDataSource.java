@@ -46,7 +46,7 @@ public interface RestaurantDataSource {
      *
      * @param restaurant the restaurant to be inserted or updated.
      */
-    void insertOrUpdateRestaurant(Restaurant restaurant);
+    long insertOrUpdateRestaurant(Restaurant restaurant);
 
     /**
      * Deletes all restaurants from the data source.

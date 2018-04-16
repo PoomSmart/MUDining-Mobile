@@ -101,10 +101,10 @@ public class DatabaseWorker {
         }
     }
 
-    private static class PopulateDatabasesTask extends AsyncTask<Context, Void, Void> {
+    private static class PopulateDatabasesTask extends AsyncTask<Object, Void, Void> {
         @Override
-        protected Void doInBackground(Context... contexts) {
-            Context context = contexts[0];
+        protected Void doInBackground(Object... params) {
+            Context context = (Context) params[0];
             populateRestaurants(context);
             populateRestaurantImages(context);
             return null;
