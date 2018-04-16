@@ -1,7 +1,9 @@
 package com.untitled.untitledapk;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -9,9 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 
@@ -35,6 +41,12 @@ public class SearchActivity extends AppCompatActivity {
     private RestaurantListAdapter restaurantListAdapter;
     private String[] prefs;
 
+    private CheckBox[] cbFoodTypes;
+    private int foodTypePref = 0;
+
+    private CheckBox[] cbCategories;
+    private int categoryPref = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
         restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
         restaurantList.setAdapter(restaurantListAdapter);
+
 
     }
 
@@ -77,20 +90,20 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String[] list = {"a","b","c"};
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // Dialog
                 // 1. Instantiate an AlertDialog.Builder with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                // Get the layout inflater
+                LayoutInflater inflater = this.getLayoutInflater();
 
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                View v = inflater.inflate(R.layout.activity_set_preference, null);
+                builder.setView(v)
+                        .setTitle("Filter")
                 // 2. Chain together various setter methods to set the dialog characteristics
-                builder.setMessage("Message").setTitle("Title")
-                        .setMultiChoiceItems(list, null, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            }
-                        })
                         // Set the action buttons
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
@@ -106,8 +119,10 @@ public class SearchActivity extends AppCompatActivity {
                         });
 
                 // 3. Get the AlertDialog from create()
+                populateCheckBoxDialog(v);
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
                 return true;
 
             default:
@@ -115,6 +130,39 @@ public class SearchActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    public void populateCheckBoxDialog(View v) {
+        Context context = getApplicationContext();
+        LinearLayout foodTypesLayout = v.findViewById(R.id.set_pref_food_types_layout);
+        LinearLayout categoriesLayout = v.findViewById(R.id.set_pref_categories_layout);
+
+        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
+        foodTypePref = sharedPref.getInt("SearchFoodTypes", 0);
+        categoryPref = sharedPref.getInt("SearchCategoryTypes", 0);
+
+        float dpf = context.getResources().getDisplayMetrics().density;
+
+        cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
+        for (int i = 0; i < cbFoodTypes.length; i++) {
+            String foodType = RestaurantManager.foodTypes[i];
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setText(foodType);
+            checkBox.setHeight((int) (48 * dpf));
+            if ((foodTypePref & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            foodTypesLayout.addView(cbFoodTypes[i] = checkBox);
+        }
+        cbCategories = new CheckBox[RestaurantManager.categoryTypes.length];
+        for (int i = 0; i < cbCategories.length; i++) {
+            String categoryType = RestaurantManager.categoryTypes[i];
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setText(categoryType);
+            checkBox.setHeight((int) (48 * dpf));
+            if ((categoryPref & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            categoriesLayout.addView(cbCategories[i] = checkBox);
         }
     }
 }

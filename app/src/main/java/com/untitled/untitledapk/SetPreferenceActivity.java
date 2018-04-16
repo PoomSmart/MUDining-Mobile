@@ -20,37 +20,7 @@ public class SetPreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_preference);
-
-        Context context = getApplicationContext();
-        LinearLayout foodTypesLayout = findViewById(R.id.set_pref_food_types_layout);
-        LinearLayout categoriesLayout = findViewById(R.id.set_pref_categories_layout);
-
-        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
-        foodTypePref = sharedPref.getInt("FoodTypes", 0);
-        categoryPref = sharedPref.getInt("CategoryTypes", 0);
-
-        float dpf = context.getResources().getDisplayMetrics().density;
-
-        cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
-        for (int i = 0; i < cbFoodTypes.length; i++) {
-            String foodType = RestaurantManager.foodTypes[i];
-            CheckBox checkBox = new CheckBox(context);
-            checkBox.setText(foodType);
-            checkBox.setHeight((int) (48 * dpf));
-            if ((foodTypePref & (1 << i)) != 0)
-                checkBox.setChecked(true);
-            foodTypesLayout.addView(cbFoodTypes[i] = checkBox);
-        }
-        cbCategories = new CheckBox[RestaurantManager.categoryTypes.length];
-        for (int i = 0; i < cbCategories.length; i++) {
-            String categoryType = RestaurantManager.categoryTypes[i];
-            CheckBox checkBox = new CheckBox(context);
-            checkBox.setText(categoryType);
-            checkBox.setHeight((int) (48 * dpf));
-            if ((categoryPref & (1 << i)) != 0)
-                checkBox.setChecked(true);
-            categoriesLayout.addView(cbCategories[i] = checkBox);
-        }
+        populateCheckBoxList();
     }
 
     @Override
@@ -103,5 +73,38 @@ public class SetPreferenceActivity extends AppCompatActivity {
                 checkBox.setChecked(true);
         }
         Toast.makeText(this, "Preferences loaded!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void populateCheckBoxList() {
+        Context context = getApplicationContext();
+        LinearLayout foodTypesLayout = findViewById(R.id.set_pref_food_types_layout);
+        LinearLayout categoriesLayout = findViewById(R.id.set_pref_categories_layout);
+
+        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
+        foodTypePref = sharedPref.getInt("FoodTypes", 0);
+        categoryPref = sharedPref.getInt("CategoryTypes", 0);
+
+        float dpf = context.getResources().getDisplayMetrics().density;
+
+        cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
+        for (int i = 0; i < cbFoodTypes.length; i++) {
+            String foodType = RestaurantManager.foodTypes[i];
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setText(foodType);
+            checkBox.setHeight((int) (48 * dpf));
+            if ((foodTypePref & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            foodTypesLayout.addView(cbFoodTypes[i] = checkBox);
+        }
+        cbCategories = new CheckBox[RestaurantManager.categoryTypes.length];
+        for (int i = 0; i < cbCategories.length; i++) {
+            String categoryType = RestaurantManager.categoryTypes[i];
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setText(categoryType);
+            checkBox.setHeight((int) (48 * dpf));
+            if ((categoryPref & (1 << i)) != 0)
+                checkBox.setChecked(true);
+            categoriesLayout.addView(cbCategories[i] = checkBox);
+        }
     }
 }
