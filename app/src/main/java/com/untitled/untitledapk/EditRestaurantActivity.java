@@ -13,8 +13,10 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
@@ -22,6 +24,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private static final int SET_LOCATION_REQUEST = 34;
     private static final int CAMERA_REQUEST = 16;
+
     Button mChangeImageButton;
     Button mSetLocationButton;
     Button mSaveRestaurantButton;
@@ -29,7 +32,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private ImageView mRestaurantImageView;
     private TextInputEditText mRestaurantNameField;
     private TextInputEditText mRestaurantDescriptionField;
-    private LinearLayout mEditRestaurantLayout;
+    private FrameLayout mRestaurantImageLayout;
     private LinearLayout mFoodTypesLayout;
     private LinearLayout mCategoryTypesLayout;
     private CheckBox[] mcbFoodTypes;
@@ -63,7 +66,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mRestaurantDescriptionField = findViewById(R.id.restaurant_description_field);
         mFoodTypesLayout = findViewById(R.id.food_types_layout);
         mCategoryTypesLayout = findViewById(R.id.category_types_layout);
-        mEditRestaurantLayout = findViewById(R.id.edit_restaurant_layout);
+        mRestaurantImageLayout = findViewById(R.id.restaurant_image_layout);
 
         // TODO: Bitmap still won't persist after rotation
         if (savedInstanceState != null)
@@ -80,6 +83,16 @@ public class EditRestaurantActivity extends AppCompatActivity {
             mRestaurantNameField.setText(restaurant.getName());
             mRestaurantDescriptionField.setText(restaurant.getDescription());
         }
+        mRestaurantNameField.addTextChangedListener(new TextValidator(mRestaurantNameField) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (text.isEmpty()) {
+                    textView.setError("This input is required.");
+                    mSaveRestaurantButton.setEnabled(false);
+                } else
+                    mSaveRestaurantButton.setEnabled(true);
+            }
+        });
     }
 
     @Override
@@ -125,7 +138,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
         });
-        mEditRestaurantLayout.addView(mRestaurantImageView, 0);
+        mRestaurantImageLayout.addView(mRestaurantImageView, 0);
     }
 
     private void generateTypes() {

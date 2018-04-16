@@ -10,7 +10,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/edit_restaurant_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -20,7 +19,8 @@
             <FrameLayout
                 android:id="@+id/restaurant_image_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp">
 
                 <Button
                     android:id="@+id/change_image_button"
