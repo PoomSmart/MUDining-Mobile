@@ -42,7 +42,7 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         mRestaurantCategoriesTextView = findViewById(R.id.view_restaurant_categories);
         mRestaurantLocationTextView = findViewById(R.id.view_restaurant_location);
 
-        mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(this, restaurant.getId()));
+        RestaurantImageManager.loadImage(this, restaurant.getId(), mRestaurantImageView);
         mRestaurantNameTextView.setText(restaurant.getName());
         mRestaurantDescriptionTextView.setText(restaurant.getDescription());
         List<String> foodTypes = new ArrayList<>();

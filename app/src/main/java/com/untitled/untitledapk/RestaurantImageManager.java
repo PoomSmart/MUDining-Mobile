@@ -3,7 +3,10 @@ package com.untitled.untitledapk;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
 import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
@@ -53,6 +56,7 @@ public class RestaurantImageManager {
         getRestaurantImageDao(context).deleteRestaurantImage(restaurantId);
     }
 
+    @Deprecated
     public static Bitmap getImage(Context context, Integer restaurantId) {
         Flowable<RestaurantImage> restaurantImage = getRestaurantImageDao(context).getRestaurantImage(restaurantId);
         String imageName = restaurantImage.blockingFirst().getImageId();
@@ -62,5 +66,12 @@ public class RestaurantImageManager {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static void loadImage(Context context, Integer restaurantId, ImageView imageView) {
+        Flowable<RestaurantImage> restaurantImage = getRestaurantImageDao(context).getRestaurantImage(restaurantId);
+        String imageName = restaurantImage.blockingFirst().getImageId();
+        File file = new File(context.getFilesDir() + File.separator + imageFolder, imageName + ".jpg");
+        Glide.with(context).load(Uri.fromFile(file)).into(imageView);
     }
 }

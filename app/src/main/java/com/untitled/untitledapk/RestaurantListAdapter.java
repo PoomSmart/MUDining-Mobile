@@ -54,7 +54,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             viewHolder = (ViewHolder) rowView.getTag();
         }
         Restaurant restaurant = restaurants.get(position);
-        viewHolder.resPhoto.setImageBitmap(RestaurantImageManager.getImage(context, restaurant.getId()));
+        RestaurantImageManager.loadImage(context, restaurant.getId(), viewHolder.resPhoto);
         viewHolder.resName.setText(restaurant.getName());
         viewHolder.restInfo.setText(restaurant.getDescription());
         if (editable) {
