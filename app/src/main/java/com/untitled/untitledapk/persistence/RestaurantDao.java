@@ -61,7 +61,7 @@ public interface RestaurantDao {
      * @param restaurant the restaurant to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertRestaurant(Restaurant restaurant);
+    long insertRestaurant(Restaurant restaurant);
 
     /**
      * Delete all restaurants.

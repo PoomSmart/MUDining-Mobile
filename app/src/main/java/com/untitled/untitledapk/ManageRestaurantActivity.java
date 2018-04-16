@@ -2,6 +2,7 @@ package com.untitled.untitledapk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ public class ManageRestaurantActivity extends AppCompatActivity {
     public Toolbar toolBar;
 
     ListView restaurantList;
+    FloatingActionButton addRestaurantButton;
     List<Restaurant> restaurants;
     RestaurantListAdapter restaurantListAdapter;
 
@@ -30,6 +32,12 @@ public class ManageRestaurantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manage_restaurant);
 
         restaurantList = findViewById(R.id.restaurantList);
+        addRestaurantButton = findViewById(R.id.addRestaurantButton);
+        addRestaurantButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditRestaurantActivity.class);
+            intent.putExtra("create", true);
+            startActivity(intent);
+        });
 
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);

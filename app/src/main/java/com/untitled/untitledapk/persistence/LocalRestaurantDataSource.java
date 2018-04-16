@@ -44,8 +44,8 @@ public class LocalRestaurantDataSource implements RestaurantDataSource {
     }
 
     @Override
-    public void insertOrUpdateRestaurant(Restaurant restaurant) {
-        mRestaurantDao.insertRestaurant(restaurant);
+    public long insertOrUpdateRestaurant(Restaurant restaurant) {
+        return mRestaurantDao.insertRestaurant(restaurant);
     }
 
     @Override

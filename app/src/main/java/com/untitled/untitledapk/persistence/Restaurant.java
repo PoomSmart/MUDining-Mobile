@@ -54,6 +54,11 @@ public class Restaurant implements Serializable {
     private String mDescription;
 
     @Ignore
+    public Restaurant() {
+        this(null);
+    }
+
+    @Ignore
     public Restaurant(String mName) {
         this(mName, null, null, 0, 0, null);
     }

@@ -1,7 +1,11 @@
 package com.untitled.untitledapk;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -16,17 +20,15 @@ import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by User on 11/4/2561.
  */
 
 public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
 
-    private final List<Restaurant> restaurants;
     private final Activity context;
     private final boolean editable;
+    private final List<Restaurant> restaurants;
 
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
         this(context, restaurants, false);
@@ -62,11 +64,32 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
                 intent.putExtra("restaurant", restaurant);
                 context.startActivityForResult(intent, ManageRestaurantActivity.EDIT_RESTAURANT_REQUEST);
             });
+            viewHolder.resDelete.setOnClickListener(v -> {
+                new AlertDialog.Builder(context).setTitle("Delete Confirmation").setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    restaurants.remove(position);
+                    new RemoveRestaurantTask().execute(context, restaurant);
+                }).setNegativeButton(android.R.string.no, null).show();
+            });
         } else {
             viewHolder.resEdit.setVisibility(View.INVISIBLE);
             viewHolder.resDelete.setVisibility(View.INVISIBLE);
         }
         return rowView;
+    }
+
+    private class RemoveRestaurantTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            Context context = (Context) params[0];
+            Restaurant restaurant = (Restaurant) params[1];
+            RestaurantManager.deleteRestaurant(context, restaurant.getId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            notifyDataSetChanged();
+        }
     }
 
     private class ViewHolder {
