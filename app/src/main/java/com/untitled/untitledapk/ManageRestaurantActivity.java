@@ -43,6 +43,15 @@ public class ManageRestaurantActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_RESTAURANT_REQUEST && resultCode == RESULT_OK) {
+            if (data.hasExtra("restaurant")) {
+                Restaurant updatedRestaurant = (Restaurant) data.getExtras().get("restaurant");
+                for (int i = 0; i < restaurants.size(); i++) {
+                    if (restaurants.get(i).getId().equals(updatedRestaurant.getId())) {
+                        restaurants.set(i, updatedRestaurant);
+                        break;
+                    }
+                }
+            }
             restaurantListAdapter.notifyDataSetChanged();
         }
     }

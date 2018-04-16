@@ -165,7 +165,10 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            setResult(Activity.RESULT_OK);
+            // TODO: Find a better way to update data in real time other than using intent update
+            Intent intent = new Intent();
+            intent.putExtra("restaurant", restaurant);
+            setResult(Activity.RESULT_OK, intent);
             finish();
         }
     }
