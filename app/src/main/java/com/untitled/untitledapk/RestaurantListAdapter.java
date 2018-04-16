@@ -73,6 +73,11 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             viewHolder.resEdit.setVisibility(View.INVISIBLE);
             viewHolder.resDelete.setVisibility(View.INVISIBLE);
         }
+        rowView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewRestaurantActivity.class);
+            intent.putExtra("restaurant", restaurant);
+            context.startActivity(intent);
+        });
         return rowView;
     }
 
