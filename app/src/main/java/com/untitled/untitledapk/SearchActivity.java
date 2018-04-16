@@ -1,7 +1,5 @@
 package com.untitled.untitledapk;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -94,17 +93,8 @@ public class SearchActivity extends AppCompatActivity {
                 builder.setView(v)
                         .setTitle("Filter")
                         // Set the action buttons
-                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                calculatePrefValue();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        });
+                        .setPositiveButton("Confirm", (dialog, id) -> calculatePrefValue())
+                        .setNegativeButton("Cancel", null);
                 // Add checkboxes to the dialog
                 populateCheckBoxDialog(v);
                 AlertDialog dialog = builder.create();
@@ -134,16 +124,17 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void populateCheckBoxDialog(View v) {
-        Context context = getApplicationContext();
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
+        ((ViewGroup) toolbar.getParent()).removeView(toolbar);
         LinearLayout foodTypesLayout = v.findViewById(R.id.set_pref_food_types_layout);
         LinearLayout categoriesLayout = v.findViewById(R.id.set_pref_categories_layout);
 
-        float dpf = context.getResources().getDisplayMetrics().density;
+        float dpf = getResources().getDisplayMetrics().density;
 
         cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
         for (int i = 0; i < cbFoodTypes.length; i++) {
             String foodType = RestaurantManager.foodTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(foodType);
             checkBox.setHeight((int) (48 * dpf));
             if ((foodTypePref & (1 << i)) != 0)
@@ -153,7 +144,7 @@ public class SearchActivity extends AppCompatActivity {
         cbCategories = new CheckBox[RestaurantManager.categoryTypes.length];
         for (int i = 0; i < cbCategories.length; i++) {
             String categoryType = RestaurantManager.categoryTypes[i];
-            CheckBox checkBox = new CheckBox(context);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(categoryType);
             checkBox.setHeight((int) (48 * dpf));
             if ((categoryPref & (1 << i)) != 0)
