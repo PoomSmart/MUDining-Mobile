@@ -11,23 +11,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by User on 11/4/2561.
  */
 
-public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
+public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements Filterable {
 
     private final Activity context;
     private final boolean editable;
+    private ValueFilter valueFilter;
     private List<Restaurant> restaurants;
+    private List<Restaurant> filteredRestaurants;
 
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
         this(context, restaurants, false);
@@ -37,6 +42,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
         this.restaurants = restaurants;
+        this.filteredRestaurants = restaurants;
         this.editable = editable;
     }
 
@@ -66,7 +72,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             viewHolder.resDelete.setOnClickListener(v -> {
                 new AlertDialog.Builder(context).setTitle("Delete Confirmation").setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     restaurants.remove(position);
-                    new RemoveRestaurantTask().execute(context, restaurant);
+                    new RemoveRestaurantTask().execute(context, restaurant, this);
                 }).setNegativeButton(android.R.string.no, null).show();
             });
         } else {
@@ -80,18 +86,42 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         this.restaurants = restaurants;
     }
 
-    private class RemoveRestaurantTask extends AsyncTask<Object, Void, Void> {
+    @Override
+    public int getCount() {
+        return restaurants.size();
+    }
+
+    @Override
+    public Restaurant getItem(int i) {
+        return restaurants.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (valueFilter == null) {
+            valueFilter = new ValueFilter();
+        }
+        return valueFilter;
+    }
+
+    private static class RemoveRestaurantTask extends AsyncTask<Object, Void, ArrayAdapter<Restaurant>> {
         @Override
-        protected Void doInBackground(Object... params) {
+        protected ArrayAdapter<Restaurant> doInBackground(Object... params) {
             Context context = (Context) params[0];
             Restaurant restaurant = (Restaurant) params[1];
+            ArrayAdapter<Restaurant> adapter = (ArrayAdapter<Restaurant>) params[2];
             RestaurantManager.deleteRestaurant(context, restaurant.getId());
-            return null;
+            return adapter;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            notifyDataSetChanged();
+        protected void onPostExecute(ArrayAdapter<Restaurant> adapter) {
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -109,5 +139,41 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             resEdit = v.findViewById(R.id.resEdit);
             resDelete = v.findViewById(R.id.resDelete);
         }
+    }
+
+    private class ValueFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            if (constraint != null && constraint.length() > 0) {
+                List<Restaurant> filterList = new ArrayList<>();
+                String query = constraint.toString().toUpperCase();
+                for (int i = 0; i < filteredRestaurants.size(); i++) {
+                    boolean matched = filteredRestaurants.get(i).getName().toUpperCase()
+                            .contains(query);
+                    if (!matched)
+                        matched = filteredRestaurants.get(i).getDescription().toUpperCase().contains(query);
+                    if (matched) {
+                        filterList.add(filteredRestaurants.get(i));
+                    }
+                }
+                results.count = filterList.size();
+                results.values = filterList;
+            } else {
+                results.count = filteredRestaurants.size();
+                results.values = filteredRestaurants;
+            }
+            return results;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint,
+                                      FilterResults results) {
+            restaurants = (List<Restaurant>) results.values;
+            notifyDataSetChanged();
+        }
+
     }
 }
