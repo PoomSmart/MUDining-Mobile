@@ -45,7 +45,7 @@ public class ManageRestaurantActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.nav_restaurants);
 
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
-        restaurantListAdapter = new RestaurantListAdapter(this, restaurants, true);
+        restaurantListAdapter = new RestaurantListAdapter(this, restaurants, 0, 0, true);
         restaurantList.setAdapter(restaurantListAdapter);
     }
 

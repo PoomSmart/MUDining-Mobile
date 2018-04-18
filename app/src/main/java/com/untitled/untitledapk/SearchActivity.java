@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -30,9 +29,7 @@ public class SearchActivity extends AppCompatActivity {
 
     ListView restaurantList;
     List<Restaurant> restaurants;
-    private EditText textQuery;
     private RestaurantListAdapter restaurantListAdapter;
-    private String[] prefs;
 
     private CheckBox[] cbFoodTypes;
     private int foodTypePref = 0;
@@ -53,7 +50,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // Need restaurants list as intent extras from previous activity
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
-        restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
+        restaurantListAdapter = new RestaurantListAdapter(this, restaurants, foodTypePref, categoryPref);
         restaurantList.setAdapter(restaurantListAdapter);
     }
 
@@ -121,6 +118,10 @@ public class SearchActivity extends AppCompatActivity {
             if (cbCategories[i].isChecked())
                 categoryPref |= 1 << i;
         }
+        restaurantListAdapter.setFoodTypes(foodTypePref);
+        restaurantListAdapter.setCategoryTypes(categoryPref);
+        restaurantListAdapter.getFilter().filter(null);
+        restaurantListAdapter.notifyDataSetChanged();
     }
 
     public void populateCheckBoxDialog(View v) {
