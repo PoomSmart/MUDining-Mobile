@@ -108,7 +108,10 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLatitude(updatedLocation.getLatitude());
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
-        RestaurantManager.insertRestaurant(this, restaurant);
+        if (createNew)
+            RestaurantManager.insertRestaurant(this, restaurant);
+        else
+            RestaurantManager.updateRestaurant(this, restaurant);
         if (imageChanged)
             RestaurantImageManager.saveImage(this, restaurant.getId(), ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap());
         Intent intent = new Intent();

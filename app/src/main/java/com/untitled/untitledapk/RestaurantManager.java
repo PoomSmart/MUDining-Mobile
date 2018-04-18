@@ -59,4 +59,18 @@ public class RestaurantManager {
             cachedRestaurants.add(restaurant);
         }
     }
+
+    public static void updateRestaurant(Context context, Restaurant restaurant) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                getRestaurantDao(context).updateRestaurant(restaurant);
+                return null;
+            }
+        };
+        if (cachedRestaurants != null) {
+            cachedRestaurants.removeIf(restaurant1 -> restaurant1.getId().equals(restaurant.getId()));
+            cachedRestaurants.add(restaurant);
+        }
+    }
 }
