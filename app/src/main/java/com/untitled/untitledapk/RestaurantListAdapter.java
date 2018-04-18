@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +42,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable) {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
+        Collections.sort(restaurants);
         this.restaurants = restaurants;
         this.filteredRestaurants = restaurants;
         this.foodTypes = foodTypes;

@@ -29,7 +29,7 @@ import java.util.UUID;
  * Immutable model class for a Restaurant
  */
 @Entity(tableName = "restaurants")
-public class Restaurant implements Serializable {
+public class Restaurant implements Serializable, Comparable<Restaurant> {
 
     @NonNull
     @PrimaryKey
@@ -124,5 +124,10 @@ public class Restaurant implements Serializable {
 
     public void setDescription(String mDescription) {
         this.mDescription = mDescription;
+    }
+
+    @Override
+    public int compareTo(@NonNull Restaurant o) {
+        return mName.compareTo(o.mName);
     }
 }

@@ -100,8 +100,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
         if (specifiedLocation == null)
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -136,11 +135,9 @@ public class RestaurantLocationActivity extends AppCompatActivity
      * Enables the My Location layer if the fine location permission has been granted.
      */
     private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
@@ -165,14 +162,12 @@ public class RestaurantLocationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
 
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Enable the my location layer if the permission has been granted.
             enableMyLocation();
         } else {
@@ -195,8 +190,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
      * Displays a dialog with error message explaining that the location permission is missing.
      */
     private void showMissingPermissionError() {
-        PermissionUtils.PermissionDeniedDialog
-                .newInstance(true).show(getSupportFragmentManager(), "dialog");
+        PermissionUtils.PermissionDeniedDialog.newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
 }

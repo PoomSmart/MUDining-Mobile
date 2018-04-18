@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -59,6 +60,7 @@ public class ManageRestaurantFragment extends Fragment {
                     }
                 }
             }
+            restaurantListAdapter.sort(Comparator.naturalOrder());
             restaurantListAdapter.notifyDataSetChanged();
         }
     }
