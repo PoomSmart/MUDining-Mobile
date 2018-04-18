@@ -123,9 +123,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     }
 
     private boolean restaurantMatchedFilters(final Restaurant restaurant) {
-        if (foodTypes == 0 && categoryTypes == 0)
-            return true;
-        return ((foodTypes & restaurant.getFoodTypes()) != 0) || ((categoryTypes & restaurant.getCategoryTypes()) != 0);
+        return ((foodTypes & restaurant.getFoodTypes()) == foodTypes) && ((categoryTypes & restaurant.getCategoryTypes()) == categoryTypes);
     }
 
     private static class RemoveRestaurantTask extends AsyncTask<Object, Void, ArrayAdapter<Restaurant>> {

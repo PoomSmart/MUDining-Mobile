@@ -20,8 +20,11 @@ import java.io.OutputStreamWriter;
 public class DatabaseWorker {
 
     private static void populateRestaurants(Context context) {
+        // Food Types: 1, 2 | Category Types: 1, 2, 3
         RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
+        // Food Types: 1 | Category Types: 2, 3
         RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
+        // Food Types: 3 | Category Types: 2
         RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
     }
 
