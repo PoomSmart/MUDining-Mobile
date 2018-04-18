@@ -22,4 +22,10 @@
     <string name="nav_restaurants">Restaurants</string>
     <string name="nav_preferences">Preferences</string>
     <string name="nav_contact">Contact Us</string>
+
+    <!-- Dialog -->
+    <string name="confirm_text">Confirm</string>
+    <string name="clear_text">Clear</string>
+    <string name="filter_text">Filter</string>
+    <string name="delete_confirmation_text">Delete Confirmation</string>
 </resources>

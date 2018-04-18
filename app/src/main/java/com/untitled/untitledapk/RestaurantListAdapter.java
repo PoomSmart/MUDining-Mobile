@@ -30,19 +30,23 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
 
     private final Activity context;
     private final boolean editable;
+    private int foodTypes;
+    private int categoryTypes;
     private ValueFilter valueFilter;
     private List<Restaurant> restaurants;
     private List<Restaurant> filteredRestaurants;
 
-    RestaurantListAdapter(Activity context, List<Restaurant> restaurants) {
-        this(context, restaurants, false);
+    RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes) {
+        this(context, restaurants, foodTypes, categoryTypes, false);
     }
 
-    RestaurantListAdapter(Activity context, List<Restaurant> restaurants, boolean editable) {
+    RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable) {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
         this.restaurants = restaurants;
         this.filteredRestaurants = restaurants;
+        this.foodTypes = foodTypes;
+        this.categoryTypes = categoryTypes;
         this.editable = editable;
     }
 
@@ -69,15 +73,16 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
                 intent.putExtra("restaurant", restaurant);
                 context.startActivityForResult(intent, ManageRestaurantActivity.EDIT_RESTAURANT_REQUEST);
             });
-            viewHolder.resDelete.setOnClickListener(v -> {
-                new AlertDialog.Builder(context).setTitle("Delete Confirmation").setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    restaurants.remove(position);
-                    new RemoveRestaurantTask().execute(context, restaurant, this);
-                }).setNegativeButton(android.R.string.no, null).show();
-            });
+            viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation_text).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                restaurants.remove(position);
+                new RemoveRestaurantTask().execute(context, restaurant, this);
+            }).setNegativeButton(android.R.string.no, null).show());
         } else {
             viewHolder.resEdit.setVisibility(View.INVISIBLE);
             viewHolder.resDelete.setVisibility(View.INVISIBLE);
+            Intent intent = new Intent(context, ViewRestaurantActivity.class);
+            intent.putExtra("restaurant", restaurant);
+            rowView.setOnClickListener(v -> context.startActivity(intent));
         }
         rowView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ViewRestaurantActivity.class);
@@ -89,6 +94,14 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
 
     public void setList(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
+    }
+
+    public void setFoodTypes(int foodTypes) {
+        this.foodTypes = foodTypes;
+    }
+
+    public void setCategoryTypes(int categoryTypes) {
+        this.categoryTypes = categoryTypes;
     }
 
     @Override
@@ -112,6 +125,12 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
             valueFilter = new ValueFilter();
         }
         return valueFilter;
+    }
+
+    private boolean restaurantMatchedFilters(final Restaurant restaurant) {
+        if (foodTypes == 0 && categoryTypes == 0)
+            return true;
+        return ((foodTypes & restaurant.getFoodTypes()) != 0) || ((categoryTypes & restaurant.getCategoryTypes()) != 0);
     }
 
     private static class RemoveRestaurantTask extends AsyncTask<Object, Void, ArrayAdapter<Restaurant>> {
@@ -150,32 +169,27 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-
-            if (constraint != null && constraint.length() > 0) {
-                List<Restaurant> filterList = new ArrayList<>();
-                String query = constraint.toString().toUpperCase();
-                for (int i = 0; i < filteredRestaurants.size(); i++) {
-                    boolean matched = filteredRestaurants.get(i).getName().toUpperCase()
-                            .contains(query);
-                    if (!matched)
-                        matched = filteredRestaurants.get(i).getDescription().toUpperCase().contains(query);
-                    if (matched) {
-                        filterList.add(filteredRestaurants.get(i));
-                    }
+            String query = constraint != null ? constraint.toString().toUpperCase() : "";
+            List<Restaurant> filterList = new ArrayList<>();
+            for (int i = 0; i < filteredRestaurants.size(); i++) {
+                Restaurant restaurant = filteredRestaurants.get(i);
+                if (!restaurantMatchedFilters(restaurant))
+                    continue;
+                boolean matched = restaurant.getName().toUpperCase().contains(query);
+                if (!matched)
+                    matched = restaurant.getDescription().toUpperCase().contains(query);
+                if (matched) {
+                    filterList.add(restaurant);
                 }
-                results.count = filterList.size();
-                results.values = filterList;
-            } else {
-                results.count = filteredRestaurants.size();
-                results.values = filteredRestaurants;
             }
+            results.count = filterList.size();
+            results.values = filterList;
             return results;
 
         }
 
         @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
+        protected void publishResults(CharSequence constraint, FilterResults results) {
             restaurants = (List<Restaurant>) results.values;
             notifyDataSetChanged();
         }
