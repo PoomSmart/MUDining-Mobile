@@ -120,7 +120,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private void configRestaurantImage() {
         mRestaurantImageView = new ImageView(this);
         if (!createNew)
-            mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(this, restaurant.getId()));
+            RestaurantImageManager.loadImage(this, restaurant.getId(), mRestaurantImageView);
         mRestaurantImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         mRestaurantImageView.setMinimumHeight(600);
         mRestaurantImageView.setMaxHeight(600);

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +19,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.function.Predicate;
 
 import io.reactivex.Flowable;
 
@@ -100,7 +98,7 @@ public class RestaurantImageManager {
         RestaurantImage restaurantImage = null;
         for (RestaurantImage restaurantImage1 : cachedRestaurantImages) {
             if (restaurantImage1.getRestaurantId().equals(restaurantId)) {
-                restaurantImage =restaurantImage1;
+                restaurantImage = restaurantImage1;
                 break;
             }
         }
