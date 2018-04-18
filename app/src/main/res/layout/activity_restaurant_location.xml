@@ -36,6 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background=" #4fc3f7"
+            android:elevation="2dp"
             android:text="@string/set_location_text" />
 
         <Button
@@ -43,6 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background=" #4fc3f7"
+            android:elevation="2dp"
             android:text="@android:string/cancel" />
     </LinearLayout>
 

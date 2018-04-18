@@ -29,12 +29,12 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/addRestaurantButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
                 android:clickable="true"
-                android:elevation="6dp"
+                android:elevation="8dp"
                 app:srcCompat="@android:drawable/ic_input_add" />
         </FrameLayout>
     </LinearLayout>

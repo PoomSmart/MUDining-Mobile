@@ -4,7 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffd740"
     tools:context="com.untitled.untitledapk.ViewRestaurantActivity">
+
+    <TextView
+        android:id="@+id/view_restaurant_name"
+        android:layout_width="208dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="8dp"
+        android:background="#0093c4"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/view_restaurant_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/view_restaurant_image"
@@ -12,26 +28,13 @@
         android:layout_height="120dp"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="76dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view_restaurant_name"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="108dp"
+        app:layout_constraintBottom_toTopOf="@+id/view_restaurant_food_types"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.454"
         app:srcCompat="@mipmap/ic_launcher" />
-
-    <TextView
-        android:id="@+id/view_restaurant_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.394" />
 
     <TextView
         android:id="@+id/view_restaurant_food_types"
