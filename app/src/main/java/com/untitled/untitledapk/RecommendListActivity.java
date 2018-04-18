@@ -29,7 +29,7 @@ public class RecommendListActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.list);
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
-        RestaurantListAdapter restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
+        RestaurantListAdapter restaurantListAdapter = new RestaurantListAdapter(this, restaurants, 0, 0);
         listView.setOnItemClickListener(listener);
         listView.setAdapter(restaurantListAdapter);
     }

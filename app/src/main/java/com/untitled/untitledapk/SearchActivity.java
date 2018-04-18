@@ -1,5 +1,6 @@
 package com.untitled.untitledapk;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -30,9 +30,7 @@ public class SearchActivity extends AppCompatActivity {
 
     ListView restaurantList;
     List<Restaurant> restaurants;
-    private EditText textQuery;
     private RestaurantListAdapter restaurantListAdapter;
-    private String[] prefs;
 
     private CheckBox[] cbFoodTypes;
     private int foodTypePref = 0;
@@ -53,7 +51,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // Need restaurants list as intent extras from previous activity
         restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
-        restaurantListAdapter = new RestaurantListAdapter(this, restaurants);
+        restaurantListAdapter = new RestaurantListAdapter(this, restaurants, foodTypePref, categoryPref);
         restaurantList.setAdapter(restaurantListAdapter);
     }
 
@@ -91,15 +89,23 @@ public class SearchActivity extends AppCompatActivity {
                 // Inflate and set the layout for the dialog
                 View v = inflater.inflate(R.layout.activity_set_preference, null);
                 builder.setView(v)
-                        .setTitle("Filter")
+                        .setTitle(R.string.filter_text)
                         // Set the action buttons
-                        .setPositiveButton("Confirm", (dialog, id) -> calculatePrefValue())
-                        .setNegativeButton("Cancel", null);
+                        .setPositiveButton(R.string.confirm_text, (dialog, id) -> calculatePrefValue())
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setNeutralButton(R.string.clear_text, null);
                 // Add checkboxes to the dialog
                 populateCheckBoxDialog(v);
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
+                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v1 -> {
+                    for (CheckBox foodType : cbFoodTypes) {
+                        foodType.setChecked(false);
+                    }
+                    for (CheckBox category : cbCategories) {
+                        category.setChecked(false);
+                    }
+                });
                 return true;
 
             default:
@@ -121,6 +127,10 @@ public class SearchActivity extends AppCompatActivity {
             if (cbCategories[i].isChecked())
                 categoryPref |= 1 << i;
         }
+        restaurantListAdapter.setFoodTypes(foodTypePref);
+        restaurantListAdapter.setCategoryTypes(categoryPref);
+        restaurantListAdapter.getFilter().filter(null);
+        restaurantListAdapter.notifyDataSetChanged();
     }
 
     public void populateCheckBoxDialog(View v) {
