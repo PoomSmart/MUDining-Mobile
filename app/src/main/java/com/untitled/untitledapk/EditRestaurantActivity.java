@@ -1,12 +1,10 @@
 package com.untitled.untitledapk;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
@@ -40,7 +38,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private Restaurant restaurant;
     private Location updatedLocation;
-    private Bitmap restaurantImage = null;
 
     private boolean createNew;
     private boolean imageChanged;
@@ -68,9 +65,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mCategoryTypesLayout = findViewById(R.id.category_types_layout);
         mRestaurantImageLayout = findViewById(R.id.restaurant_image_layout);
 
-        // TODO: Bitmap still won't persist after rotation
-        if (savedInstanceState != null)
-            restaurantImage = savedInstanceState.getParcelable("bitmap");
         configRestaurantImage();
         generateTypes();
         mSetLocationButton.setOnClickListener(v -> setLocationButtonClicked());
@@ -95,12 +89,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("bitmap", restaurantImage);
-        super.onSaveInstanceState(outState);
-    }
-
     private void saveRestaurant() {
         int foodTypes = 0;
         int categoryTypes = 0;
@@ -120,16 +108,19 @@ public class EditRestaurantActivity extends AppCompatActivity {
             restaurant.setLatitude(updatedLocation.getLatitude());
             restaurant.setLongitude(updatedLocation.getLongitude());
         }
-        new EditDatabasesTask().execute(this, restaurant, imageChanged ? ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap() : null);
+        RestaurantManager.insertRestaurant(this, restaurant);
+        if (imageChanged)
+            RestaurantImageManager.saveImage(this, restaurant.getId(), ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap());
+        Intent intent = new Intent();
+        intent.putExtra("restaurant", restaurant);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
     private void configRestaurantImage() {
         mRestaurantImageView = new ImageView(this);
-        if (!createNew) {
-            if (restaurantImage == null)
-                restaurantImage = RestaurantImageManager.getImage(this, restaurant.getId());
-            mRestaurantImageView.setImageBitmap(restaurantImage);
-        }
+        if (!createNew)
+            mRestaurantImageView.setImageBitmap(RestaurantImageManager.getImage(this, restaurant.getId()));
         mRestaurantImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         mRestaurantImageView.setMinimumHeight(600);
         mRestaurantImageView.setMaxHeight(600);
@@ -178,32 +169,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             imageChanged = true;
-            mRestaurantImageView.setImageBitmap(restaurantImage = (Bitmap) data.getExtras().get("data"));
-        }
-    }
-
-    private class EditDatabasesTask extends AsyncTask<Object, Void, Void> {
-        @Override
-        protected Void doInBackground(Object... params) {
-            Context context = (Context) params[0];
-            Restaurant restaurant = (Restaurant) params[1];
-            Bitmap bitmap = (Bitmap) params[2];
-            // TODO: Can this be simplified?
-            int insertID = (int) RestaurantManager.insertRestaurant(context, restaurant);
-            if (restaurant.getId() == null)
-                restaurant.setId(insertID);
-            if (bitmap != null)
-                RestaurantImageManager.saveImage(context, restaurant.getId(), bitmap);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            // TODO: Find a better way to update data in real time other than using intent update
-            Intent intent = new Intent();
-            intent.putExtra("restaurant", restaurant);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
         }
     }
 }

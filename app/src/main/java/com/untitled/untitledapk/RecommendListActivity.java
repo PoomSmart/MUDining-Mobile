@@ -28,7 +28,8 @@ public class RecommendListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_list);
 
         listView = findViewById(R.id.list);
-        restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
+        restaurants = RestaurantManager.getRestaurants();
+        // TODO: retain only recommended restaurants
         RestaurantListAdapter restaurantListAdapter = new RestaurantListAdapter(this, restaurants, 0, 0);
         listView.setOnItemClickListener(listener);
         listView.setAdapter(restaurantListAdapter);

@@ -2,51 +2,50 @@ package com.untitled.untitledapk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import static android.app.Activity.RESULT_OK;
 
-public class ManageRestaurantActivity extends AppCompatActivity {
+public class ManageRestaurantFragment extends Fragment {
 
     public static final int EDIT_RESTAURANT_REQUEST = 4352;
-
-    @BindView(R.id.toolbar)
-    public Toolbar toolBar;
 
     ListView restaurantList;
     FloatingActionButton addRestaurantButton;
     List<Restaurant> restaurants;
     RestaurantListAdapter restaurantListAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_restaurant);
+    public ManageRestaurantFragment() {
+    }
 
-        restaurantList = findViewById(R.id.restaurantList);
-        addRestaurantButton = findViewById(R.id.addRestaurantButton);
+    public static ManageRestaurantFragment newInstance() {
+        return new ManageRestaurantFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_manage_restaurant, container, false);
+        restaurantList = view.findViewById(R.id.restaurantList);
+        addRestaurantButton = view.findViewById(R.id.addRestaurantButton);
         addRestaurantButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EditRestaurantActivity.class);
+            Intent intent = new Intent(getContext(), EditRestaurantActivity.class);
             intent.putExtra("create", true);
             startActivity(intent);
         });
-
-        ButterKnife.bind(this);
-        setSupportActionBar(toolBar);
-        DrawerUtils.getDrawer(this, toolBar, R.string.nav_restaurants);
-        getSupportActionBar().setTitle(R.string.nav_restaurants);
-
-        restaurants = (List<Restaurant>) getIntent().getExtras().get("restaurants");
-        restaurantListAdapter = new RestaurantListAdapter(this, restaurants, 0, 0, true);
+        restaurants = RestaurantManager.getRestaurants();
+        restaurantListAdapter = new RestaurantListAdapter(getActivity(), restaurants, 0, 0, true);
         restaurantList.setAdapter(restaurantListAdapter);
+        return view;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

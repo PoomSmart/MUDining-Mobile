@@ -45,7 +45,7 @@ public interface RestaurantImageDao {
      * @return
      */
     @Query("SELECT * FROM RestaurantImages WHERE restaurantid = :restaurantId")
-    Flowable<RestaurantImage> getRestaurantImage(Integer restaurantId);
+    Flowable<RestaurantImage> getRestaurantImage(String restaurantId);
 
     /**
      * Insert a restaurant image in the database. If the restaurant already exists, replace it.
@@ -68,5 +68,5 @@ public interface RestaurantImageDao {
      * @param restaurantId
      */
     @Query("DELETE FROM RestaurantImages WHERE restaurantid = :restaurantId")
-    void deleteRestaurantImage(Integer restaurantId);
+    void deleteRestaurantImage(String restaurantId);
 }

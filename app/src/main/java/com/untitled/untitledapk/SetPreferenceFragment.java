@@ -3,19 +3,16 @@ package com.untitled.untitledapk;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class SetPreferenceActivity extends AppCompatActivity {
-
-    @BindView(R.id.toolbar)
-    public Toolbar toolBar;
+public class SetPreferenceFragment extends Fragment {
 
     private CheckBox[] cbFoodTypes;
     private int foodTypePref = 0;
@@ -23,27 +20,28 @@ public class SetPreferenceActivity extends AppCompatActivity {
     private CheckBox[] cbCategories;
     private int categoryPref = 0;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_preference);
+    public SetPreferenceFragment() {
+    }
 
-        ButterKnife.bind(this);
-        setSupportActionBar(toolBar);
-        DrawerUtils.getDrawer(this, toolBar, R.string.nav_preferences);
-        getSupportActionBar().setTitle(R.string.nav_preferences);
-
-        populateCheckBoxList();
+    public static SetPreferenceFragment newInstance() {
+        return new SetPreferenceFragment();
     }
 
     @Override
-    protected void onResume() {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_set_preference, container, false);
+        populateCheckBoxList(view);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
         setPreferenceCheckBox();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         savePreference();
     }
@@ -62,17 +60,17 @@ public class SetPreferenceActivity extends AppCompatActivity {
     }
 
     public void savePreference() {
-        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = sharedPref.edit();
         calculatePrefValue();
         prefEditor.putInt("FoodTypes", foodTypePref);
         prefEditor.putInt("CategoryTypes", categoryPref);
         prefEditor.apply();
-        Toast.makeText(this, "Preferences saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Preferences saved!", Toast.LENGTH_SHORT).show();
     }
 
     public void setPreferenceCheckBox() {
-        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         for (int i = 0; i < cbFoodTypes.length; i++) {
             CheckBox checkBox = cbFoodTypes[i];
@@ -85,15 +83,15 @@ public class SetPreferenceActivity extends AppCompatActivity {
             if ((categoryPref & (1 << i)) != 0)
                 checkBox.setChecked(true);
         }
-        Toast.makeText(this, "Preferences loaded!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Preferences loaded!", Toast.LENGTH_SHORT).show();
     }
 
-    public void populateCheckBoxList() {
-        Context context = getApplicationContext();
-        LinearLayout foodTypesLayout = findViewById(R.id.set_pref_food_types_layout);
-        LinearLayout categoriesLayout = findViewById(R.id.set_pref_categories_layout);
+    public void populateCheckBoxList(View view) {
+        Context context = getContext();
+        LinearLayout foodTypesLayout = view.findViewById(R.id.set_pref_food_types_layout);
+        LinearLayout categoriesLayout = view.findViewById(R.id.set_pref_categories_layout);
 
-        SharedPreferences sharedPref = getSharedPreferences("prefStore", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
 

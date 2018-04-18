@@ -5,9 +5,11 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 
 import com.untitled.untitledapk.persistence.Restaurant;
+import com.untitled.untitledapk.persistence.RestaurantDao;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
 import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
+import com.untitled.untitledapk.persistence.RestaurantsDatabase;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,20 +19,30 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
+import static com.untitled.untitledapk.RestaurantImageManager.readRestaurantImages;
+import static com.untitled.untitledapk.RestaurantManager.readRestaurants;
+
 public class DatabaseWorker {
 
     private static void populateRestaurants(Context context) {
-        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
-        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
-        RestaurantManager.insertRestaurant(context, new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
+        RestaurantsDatabase restaurantsDatabase = RestaurantsDatabase.getInstance(context);
+        RestaurantDao restaurantDao = restaurantsDatabase.restaurantDao();
+        // Food Types: 1, 2 | Category Types: 1, 2, 3
+        restaurantDao.insertRestaurant(new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
+        // Food Types: 1 | Category Types: 2, 3
+        restaurantDao.insertRestaurant(new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
+        // Food Types: 3 | Category Types: 2
+        restaurantDao.insertRestaurant(new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
     }
 
     private static void populateRestaurantImages(Context context) {
         RestaurantImagesDatabase restaurantImagesDatabase = RestaurantImagesDatabase.getInstance(context);
         RestaurantImageDao restaurantImageDao = restaurantImagesDatabase.restaurantImageDao();
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(1, "1"));
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(2, "2"));
-        restaurantImageDao.insertRestaurantImage(new RestaurantImage(3, "3"));
+        int i = 1;
+        RestaurantManager.readRestaurants(context);
+        for (Restaurant restaurant : RestaurantManager.getRestaurants()) {
+            restaurantImageDao.insertRestaurantImage(new RestaurantImage(restaurant.getId(), i++ + ""));
+        }
     }
 
     private static boolean isDefaultImagesCopied(Context context) {
@@ -43,12 +55,12 @@ public class DatabaseWorker {
         return file.exists();
     }
 
-    private static void writeFile(File file, String data) {
+    private static void writeEmptyFile(File file) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
             BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-            bufferedWriter.write(data);
+            bufferedWriter.write("");
             bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,25 +101,40 @@ public class DatabaseWorker {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        writeFile(new File(internalStorage, "copied"), "");
+        writeEmptyFile(new File(internalStorage, "copied"));
     }
 
     public static void work(Context context) {
         if (!isDefaultImagesCopied(context))
             copyDefaultImages(context);
-        if (!isDatabaseSet(context)) {
-            new PopulateDatabasesTask().execute(context);
-            writeFile(new File(context.getFilesDir(), "dbset"), "");
-        }
+        new PopulateDatabasesTask().execute(context);
     }
 
-    private static class PopulateDatabasesTask extends AsyncTask<Object, Void, Void> {
+    private static class ReadDatabaseTask extends AsyncTask<Object, Void, Void> {
         @Override
         protected Void doInBackground(Object... params) {
             Context context = (Context) params[0];
-            populateRestaurants(context);
-            populateRestaurantImages(context);
+            readRestaurants(context);
+            readRestaurantImages(context);
             return null;
+        }
+    }
+
+    private static class PopulateDatabasesTask extends AsyncTask<Object, Void, Context> {
+        @Override
+        protected Context doInBackground(Object... params) {
+            Context context = (Context) params[0];
+            if (!isDatabaseSet(context)) {
+                populateRestaurants(context);
+                populateRestaurantImages(context);
+                writeEmptyFile(new File(context.getFilesDir(), "dbset"));
+            }
+            return context;
+        }
+
+        @Override
+        protected void onPostExecute(Context context) {
+            new ReadDatabaseTask().execute(context);
         }
     }
 }

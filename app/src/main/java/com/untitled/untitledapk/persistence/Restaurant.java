@@ -23,6 +23,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Immutable model class for a Restaurant
@@ -31,9 +32,9 @@ import java.io.Serializable;
 public class Restaurant implements Serializable {
 
     @NonNull
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "restaurantid")
-    private Integer mId;
+    private final String mId;
 
     @ColumnInfo(name = "restaurantname")
     private String mName;
@@ -55,15 +56,16 @@ public class Restaurant implements Serializable {
 
     @Ignore
     public Restaurant() {
-        this(null);
+        this(null, null, null, 0, 0, null);
     }
 
     @Ignore
-    public Restaurant(String mName) {
-        this(mName, null, null, 0, 0, null);
+    public Restaurant(String mName, Double mLatitude, Double mLongitude, int mFoodTypes, int mCategoryTypes, String mDescription) {
+        this(UUID.randomUUID().toString(), mName, mLatitude, mLongitude, mFoodTypes, mCategoryTypes, mDescription);
     }
 
-    public Restaurant(String mName, Double mLatitude, Double mLongitude, int mFoodTypes, int mCategoryTypes, String mDescription) {
+    public Restaurant(String mId, String mName, Double mLatitude, Double mLongitude, int mFoodTypes, int mCategoryTypes, String mDescription) {
+        this.mId = mId;
         this.mName = mName;
         this.mLatitude = mLatitude;
         this.mLongitude = mLongitude;
@@ -72,12 +74,8 @@ public class Restaurant implements Serializable {
         this.mDescription = mDescription;
     }
 
-    public Integer getId() {
+    public String getId() {
         return mId;
-    }
-
-    public void setId(@NonNull Integer mId) {
-        this.mId = mId;
     }
 
     public String getName() {
