@@ -139,7 +139,6 @@ public class SearchFragment extends Fragment {
 
     public void populateCheckBoxDialog(View v) {
         Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ((ViewGroup) toolbar.getParent()).removeView(toolbar);
         LinearLayout foodTypesLayout = v.findViewById(R.id.set_pref_food_types_layout);
         LinearLayout categoriesLayout = v.findViewById(R.id.set_pref_categories_layout);
         Context context = getActivity();
