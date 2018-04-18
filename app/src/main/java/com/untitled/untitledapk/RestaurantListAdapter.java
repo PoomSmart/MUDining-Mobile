@@ -73,7 +73,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
                 intent.putExtra("restaurant", restaurant);
                 context.startActivityForResult(intent, ManageRestaurantActivity.EDIT_RESTAURANT_REQUEST);
             });
-            viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle("Delete Confirmation").setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation_text).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
                 restaurants.remove(position);
                 new RemoveRestaurantTask().execute(context, restaurant, this);
             }).setNegativeButton(android.R.string.no, null).show());
@@ -184,8 +184,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
         }
 
         @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
+        protected void publishResults(CharSequence constraint, FilterResults results) {
             restaurants = (List<Restaurant>) results.values;
             notifyDataSetChanged();
         }
