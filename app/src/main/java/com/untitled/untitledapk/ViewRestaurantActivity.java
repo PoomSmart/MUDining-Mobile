@@ -58,8 +58,6 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         }
         mRestaurantCategoriesTextView.setText("Categories: " + TextUtils.join(", ", categories));
         mRestaurantLocationTextView.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
-        mRestaurantLocationTextView.setBackgroundColor(Color.GRAY);
-        mRestaurantLocationTextView.setTextColor(Color.WHITE);
         mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
     }
 

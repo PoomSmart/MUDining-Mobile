@@ -9,7 +9,8 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffff74">
 
         <include layout="@layout/toolbar" />
 
@@ -25,7 +26,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:background=" #4fc3f7"
-                android:elevation="2dp"
+                android:textColor="#ffffff"
                 android:text="@string/recommend_button_text" />
         </RelativeLayout>
 
