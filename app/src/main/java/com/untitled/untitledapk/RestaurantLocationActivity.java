@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,66 +30,88 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.untitled.untitledapk.persistence.Restaurant;
 
-/**
- * This demo shows how GMS Location can be used to check for changes to the users location.  The
- * "My Location" button uses GMS Location to set the blue dot representing the users location.
- * Permission for {@link android.Manifest.permission#ACCESS_FINE_LOCATION} is requested at run
- * time. If the permission has not been granted, the Activity is finished with an error message.
- */
 public class RestaurantLocationActivity extends AppCompatActivity
         implements
-        OnMyLocationButtonClickListener,
-        OnMyLocationClickListener,
         OnMapReadyCallback,
+        GoogleMap.OnMapClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    /**
-     * Request code for location permission request.
-     *
-     * @see #onRequestPermissionsResult(int, String[], int[])
-     */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     boolean editable;
+    boolean route;
     Button mSetLocationButton;
     Button mCancelButton;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private Location lastLocation;
-    private Location specifiedLocation;
-    /**
-     * Flag indicating whether a requested permission has been denied after returning in
-     * {@link #onRequestPermissionsResult(int, String[], int[])}.
-     */
+
+    LocationRequest mLocationRequest;
+    Location mCurrentLocation;
+    Location mDestinationLocation;
+    FusedLocationProviderClient mFusedLocationClient;
+
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;
-    private Restaurant restaurant;
+    Restaurant restaurant;
+
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            mCurrentLocation = locationResult.getLastLocation();
+            if (mDestinationLocation != null) {
+                animateToLocation(mDestinationLocation);
+                if (route) {
+                    GoogleDirection.withServerKey(String.valueOf(R.string.google_maps_key))
+                            .from(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
+                            .to(new LatLng(mDestinationLocation.getLatitude(), mDestinationLocation.getLongitude()))
+                            .execute(new DirectionCallback() {
+                                @Override
+                                public void onDirectionSuccess(Direction direction, String rawBody) {
+                                    Toast.makeText(getApplicationContext(), "Route created successfully", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onDirectionFailure(Throwable t) {
+                                    Toast.makeText(getApplicationContext(), "Cannot create route", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            } else
+                animateToLocation(mCurrentLocation);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_location);
-
         Intent intent = getIntent();
         editable = intent.getBooleanExtra("editable", true);
-        if (intent.hasExtra("location"))
-            specifiedLocation = (Location) intent.getExtras().get("location");
-        if (intent.hasExtra("restaurant"))
+        route = intent.getBooleanExtra("route", false);
+        if (intent.hasExtra("restaurant")) {
             restaurant = (Restaurant) intent.getExtras().get("restaurant");
-
+            if (!editable) {
+                mDestinationLocation = new Location("");
+                mDestinationLocation.setLatitude(restaurant.getLatitude());
+                mDestinationLocation.setLongitude(restaurant.getLongitude());
+            }
+        }
         mSetLocationButton = findViewById(R.id.map_set_location_button);
         mCancelButton = findViewById(R.id.map_cancel_button);
-
         if (editable) {
             mSetLocationButton.setOnClickListener(v -> setCurrentLocation());
             mCancelButton.setOnClickListener(v -> finish());
@@ -96,24 +119,30 @@ public class RestaurantLocationActivity extends AppCompatActivity
             mSetLocationButton.setVisibility(View.INVISIBLE);
             mCancelButton.setVisibility(View.INVISIBLE);
         }
-
-        if (specifiedLocation == null)
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFusedLocationClient != null)
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
     private void animateToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(latLng));
         mMap.animateCamera(cameraUpdate);
     }
 
     private void setCurrentLocation() {
-        if (lastLocation != null) {
+        if (mCurrentLocation != null) {
             Intent intent = new Intent();
-            intent.putExtra("restaurantLocation", lastLocation);
+            intent.putExtra("restaurantLocation", mCurrentLocation);
             setResult(RESULT_OK, intent);
         }
         finish();
@@ -122,75 +151,52 @@ public class RestaurantLocationActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-
-        if (specifiedLocation == null) {
-            mMap.setOnMyLocationButtonClickListener(this);
-            mMap.setOnMyLocationClickListener(this);
-            enableMyLocation();
-        } else
-            animateToLocation(specifiedLocation);
+        if (editable)
+            mMap.setOnMapClickListener(this);
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(120000);
+        mLocationRequest.setFastestInterval(120000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        enableMyLocation();
     }
 
-    /**
-     * Enables the My Location layer if the fine location permission has been granted.
-     */
     private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, location -> {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            animateToLocation(lastLocation = location);
-                        }
-                    });
-        }
-    }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        return false;
-    }
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        else if (mMap != null)
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE)
             return;
-        }
-
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION))
             enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
+        else
             mPermissionDenied = true;
-        }
     }
 
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
         if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
             showMissingPermissionError();
             mPermissionDenied = false;
         }
     }
 
-    /**
-     * Displays a dialog with error message explaining that the location permission is missing.
-     */
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog.newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(latLng));
+        if (mCurrentLocation != null) {
+            mCurrentLocation.setLatitude(latLng.latitude);
+            mCurrentLocation.setLongitude(latLng.longitude);
+        }
+    }
 }

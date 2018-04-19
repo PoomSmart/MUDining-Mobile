@@ -31,4 +31,5 @@
 
     <string name="food_type_text">Food Types</string>
     <string name="categories_text">Categories</string>
+    <string name="location_from_here_text">Location from here</string>
 </resources>
