@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         startFragment(RecommendFragment.class, R.string.nav_recommend);
+        drawer.setSelection(R.string.nav_recommend);
 
         DatabaseWorker.work(this);
     }
