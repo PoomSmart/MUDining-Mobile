@@ -1,7 +1,6 @@
 package com.untitled.untitledapk;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -56,9 +55,6 @@ public class ViewRestaurantActivity extends AppCompatActivity {
                 categories.add(RestaurantManager.categoryTypes[i]);
         }
         mRestaurantCategoriesTextView.setText("Categories: " + TextUtils.join(", ", categories));
-        mRestaurantLocationTextView.setText(R.string.location_from_here_text);
-        mRestaurantLocationTextView.setBackgroundColor(Color.GRAY);
-        mRestaurantLocationTextView.setTextColor(Color.WHITE);
         mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
     }
 

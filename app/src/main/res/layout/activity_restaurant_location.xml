@@ -13,7 +13,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<!-- This can go anywhere in your layout (see other demos for some examples). -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="match_parent"
@@ -35,14 +34,20 @@
             android:id="@+id/map_set_location_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
+            android:background=" #4fc3f7"
+            android:elevation="2dp"
             android:text="@string/set_location_text" />
 
         <Button
             android:id="@+id/map_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
+            android:background=" #4fc3f7"
+            android:elevation="2dp"
             android:text="@android:string/cancel" />
     </LinearLayout>
 
