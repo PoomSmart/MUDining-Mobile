@@ -75,7 +75,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
             if (mDestinationLocation != null) {
                 animateToLocation(mDestinationLocation);
                 if (route) {
-                    GoogleDirection.withServerKey(String.valueOf(R.string.google_maps_key))
+                    GoogleDirection.withServerKey(getResources().getString(R.string.google_maps_key))
                             .from(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
                             .to(new LatLng(mDestinationLocation.getLatitude(), mDestinationLocation.getLongitude()))
                             .execute(new DirectionCallback() {
