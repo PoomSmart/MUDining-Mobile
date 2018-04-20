@@ -41,7 +41,7 @@ public class RestaurantManager {
                 RestaurantImageManager.removeImage(context, restaurantId);
                 return null;
             }
-        };
+        }.execute();
         if (cachedRestaurants != null)
             cachedRestaurants.removeIf(restaurant -> restaurant.getId().equals(restaurantId));
     }
@@ -53,7 +53,7 @@ public class RestaurantManager {
                 getRestaurantDao(context).insertRestaurant(restaurant);
                 return null;
             }
-        };
+        }.execute();
         if (cachedRestaurants != null) {
             cachedRestaurants.removeIf(restaurant1 -> restaurant1.getId().equals(restaurant.getId()));
             cachedRestaurants.add(restaurant);
@@ -67,7 +67,7 @@ public class RestaurantManager {
                 getRestaurantDao(context).updateRestaurant(restaurant);
                 return null;
             }
-        };
+        }.execute();
         if (cachedRestaurants != null) {
             cachedRestaurants.removeIf(restaurant1 -> restaurant1.getId().equals(restaurant.getId()));
             cachedRestaurants.add(restaurant);

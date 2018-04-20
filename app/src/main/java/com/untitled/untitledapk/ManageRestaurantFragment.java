@@ -60,6 +60,7 @@ public class ManageRestaurantFragment extends Fragment {
                     }
                 }
             }
+            restaurantListAdapter.setList(restaurants);
             restaurantListAdapter.sort(Comparator.naturalOrder());
             restaurantListAdapter.notifyDataSetChanged();
         }
