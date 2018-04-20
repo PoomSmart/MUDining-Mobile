@@ -1,5 +1,6 @@
 package com.untitled.untitledapk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         startFragment(fragmentClass, itemId);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment.getClass().equals(ManageRestaurantFragment.class)) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+                break;
+            }
+        }
     }
 
 }

@@ -53,8 +53,9 @@ public class ManageRestaurantFragment extends Fragment {
         if (requestCode == EDIT_RESTAURANT_REQUEST && resultCode == RESULT_OK) {
             if (data.hasExtra("restaurant")) {
                 Restaurant updatedOrNewRestaurant = (Restaurant) data.getExtras().get("restaurant");
+                String oldId = data.getStringExtra("oldRestaurantId");
                 for (int i = 0; i < restaurants.size(); i++) {
-                    if (restaurants.get(i).getId().equals(updatedOrNewRestaurant.getId())) {
+                    if (restaurants.get(i).getId().equals(oldId)) {
                         restaurants.set(i, updatedOrNewRestaurant);
                         break;
                     }
