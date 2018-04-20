@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.untitled.untitledapk.ManageRestaurantFragment.EDIT_RESTAURANT_REQUEST;
+
 /**
  * Created by User on 11/4/2561.
  */
@@ -71,7 +73,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
             viewHolder.resEdit.setOnClickListener(v -> {
                 Intent intent = new Intent(context, EditRestaurantActivity.class);
                 intent.putExtra("restaurant", restaurant);
-                context.startActivityForResult(intent, ManageRestaurantFragment.EDIT_RESTAURANT_REQUEST);
+                context.startActivityForResult(intent, EDIT_RESTAURANT_REQUEST);
             });
             viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation_text).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
                 restaurants.remove(position);

@@ -37,6 +37,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private CheckBox[] mcbCategoryTypes;
 
     private Restaurant restaurant;
+    private String oldRestaurantId;
     private Location updatedLocation;
 
     private boolean createNew;
@@ -54,6 +55,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
             finish();
         }
         restaurant = createNew ? new Restaurant() : (Restaurant) intent.getExtras().get("restaurant");
+        if (!createNew)
+            oldRestaurantId = restaurant.getId();
 
         mChangeImageButton = findViewById(R.id.change_image_button);
         mSetLocationButton = findViewById(R.id.set_location_button);
@@ -116,6 +119,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
             RestaurantImageManager.saveImage(this, restaurant.getId(), ((BitmapDrawable) mRestaurantImageView.getDrawable()).getBitmap());
         Intent intent = new Intent();
         intent.putExtra("restaurant", restaurant);
+        if (oldRestaurantId != null)
+            intent.putExtra("oldRestaurantId", oldRestaurantId);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
