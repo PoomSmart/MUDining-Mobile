@@ -11,8 +11,8 @@ import java.util.List;
 
 public class RestaurantManager {
 
-    public static String[] foodTypes = {"Type1", "Type2", "Type3"};
-    public static String[] categoryTypes = {"Category1", "Category2", "Category3"};
+    public static String[] foodTypes = {"Thai", "Japanese", "Chinese", "European"};
+    public static String[] categoryTypes = {"Single Dish", "Set Menu", "Buffet", "Other"};
     private static RestaurantDao restaurantDao = null;
     private static List<Restaurant> cachedRestaurants = null;
 
