@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             case R.string.nav_preferences:
                 fragmentClass = SetPreferenceFragment.class;
                 break;
+            case R.string.nav_contact:
+                fragmentClass = ContactUsFragment.class;
             default:
                 break;
         }
