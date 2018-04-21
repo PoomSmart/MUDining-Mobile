@@ -31,42 +31,18 @@ import io.reactivex.Flowable;
 @Dao
 public interface RestaurantImageDao {
 
-    /**
-     * Return all restaurant images.
-     *
-     * @return
-     */
     @Query("SELECT * FROM RestaurantImages")
     List<RestaurantImage> getRestaurantImages();
 
-    /**
-     * Return the restaurant image of the given restaurant id.
-     *
-     * @return
-     */
     @Query("SELECT * FROM RestaurantImages WHERE restaurantid = :restaurantId")
-    Flowable<RestaurantImage> getRestaurantImage(Integer restaurantId);
+    Flowable<RestaurantImage> getRestaurantImage(String restaurantId);
 
-    /**
-     * Insert a restaurant image in the database. If the restaurant already exists, replace it.
-     *
-     * @param restaurantImage the restaurant to be inserted.
-     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRestaurantImage(RestaurantImage restaurantImage);
 
-    /**
-     * Delete all restaurant images.
-     *
-     */
     @Query("DELETE FROM RestaurantImages")
     void deleteAllRestaurantImages();
 
-    /**
-     * Delete the restaurant image with the given restaurant id.
-     *
-     * @param restaurantId
-     */
     @Query("DELETE FROM RestaurantImages WHERE restaurantid = :restaurantId")
-    void deleteRestaurantImage(Integer restaurantId);
+    void deleteRestaurantImage(String restaurantId);
 }

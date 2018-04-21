@@ -30,30 +30,22 @@ public class RestaurantImage {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "restaurantid")
-    private Integer mRestaurantId;
+    private final String mRestaurantId;
 
     @ColumnInfo(name = "imageid")
-    private String mImageId;
+    private final String mImageId;
 
-    public RestaurantImage(Integer mRestaurantId, String mImageId) {
+    public RestaurantImage(String mRestaurantId, String mImageId) {
         this.mRestaurantId = mRestaurantId;
         this.mImageId = mImageId;
     }
 
-    public Integer getRestaurantId() {
+    public String getRestaurantId() {
         return mRestaurantId;
-    }
-
-    public void setRestaurantId(@NonNull Integer mRestaurantId) {
-        this.mRestaurantId = mRestaurantId;
     }
 
     public String getImageId() {
         return mImageId;
-    }
-
-    public void setImageId(String mImageId) {
-        this.mImageId = mImageId;
     }
 
 }

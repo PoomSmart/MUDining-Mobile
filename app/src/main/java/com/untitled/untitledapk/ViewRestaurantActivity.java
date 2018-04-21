@@ -1,8 +1,6 @@
 package com.untitled.untitledapk;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -57,18 +55,14 @@ public class ViewRestaurantActivity extends AppCompatActivity {
                 categories.add(RestaurantManager.categoryTypes[i]);
         }
         mRestaurantCategoriesTextView.setText("Categories: " + TextUtils.join(", ", categories));
-        mRestaurantLocationTextView.setText(String.format("Location: (%f, %f)", restaurant.getLatitude(), restaurant.getLongitude()));
         mRestaurantLocationTextView.setOnClickListener(v -> showRestaurantLocation());
     }
 
     private void showRestaurantLocation() {
         Intent intent = new Intent(this, RestaurantLocationActivity.class);
         intent.putExtra("editable", false);
+        intent.putExtra("route", true);
         intent.putExtra("restaurant", restaurant);
-        Location location = new Location("");
-        location.setLatitude(restaurant.getLatitude());
-        location.setLongitude(restaurant.getLongitude());
-        intent.putExtra("location", location);
         startActivity(intent);
     }
 }

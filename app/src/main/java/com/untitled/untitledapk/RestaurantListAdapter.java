@@ -2,9 +2,7 @@ package com.untitled.untitledapk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,7 +18,10 @@ import android.widget.TextView;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static com.untitled.untitledapk.ManageRestaurantFragment.EDIT_RESTAURANT_REQUEST;
 
 /**
  * Created by User on 11/4/2561.
@@ -43,6 +44,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable) {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
+        Collections.sort(restaurants);
         this.restaurants = restaurants;
         this.filteredRestaurants = restaurants;
         this.foodTypes = foodTypes;
@@ -55,6 +57,8 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View rowView = convertView;
         ViewHolder viewHolder;
+
+        // TODO: Set listview resInfo width and maxLength to match editable value, add ... to the end of resInfo if possible
         if (rowView == null) {
             LayoutInflater layoutInflater = context.getLayoutInflater();
             rowView = layoutInflater.inflate(R.layout.listview_layout, null, true);
@@ -71,11 +75,12 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
             viewHolder.resEdit.setOnClickListener(v -> {
                 Intent intent = new Intent(context, EditRestaurantActivity.class);
                 intent.putExtra("restaurant", restaurant);
-                context.startActivityForResult(intent, ManageRestaurantActivity.EDIT_RESTAURANT_REQUEST);
+                context.startActivityForResult(intent, EDIT_RESTAURANT_REQUEST);
             });
             viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation_text).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
                 restaurants.remove(position);
-                new RemoveRestaurantTask().execute(context, restaurant, this);
+                RestaurantManager.deleteRestaurant(context, restaurant.getId());
+                notifyDataSetChanged();
             }).setNegativeButton(android.R.string.no, null).show());
         } else {
             viewHolder.resEdit.setVisibility(View.INVISIBLE);
@@ -119,6 +124,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
         return i;
     }
 
+    @NonNull
     @Override
     public Filter getFilter() {
         if (valueFilter == null) {
@@ -128,25 +134,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     }
 
     private boolean restaurantMatchedFilters(final Restaurant restaurant) {
-        if (foodTypes == 0 && categoryTypes == 0)
-            return true;
-        return ((foodTypes & restaurant.getFoodTypes()) != 0) || ((categoryTypes & restaurant.getCategoryTypes()) != 0);
-    }
-
-    private static class RemoveRestaurantTask extends AsyncTask<Object, Void, ArrayAdapter<Restaurant>> {
-        @Override
-        protected ArrayAdapter<Restaurant> doInBackground(Object... params) {
-            Context context = (Context) params[0];
-            Restaurant restaurant = (Restaurant) params[1];
-            ArrayAdapter<Restaurant> adapter = (ArrayAdapter<Restaurant>) params[2];
-            RestaurantManager.deleteRestaurant(context, restaurant.getId());
-            return adapter;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayAdapter<Restaurant> adapter) {
-            adapter.notifyDataSetChanged();
-        }
+        return ((foodTypes & restaurant.getFoodTypes()) == foodTypes) && ((categoryTypes & restaurant.getCategoryTypes()) == categoryTypes);
     }
 
     private class ViewHolder {
