@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.List;

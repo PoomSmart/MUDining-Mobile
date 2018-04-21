@@ -1,4 +1,4 @@
-package com.untitled.untitledapk;
+package com.untitled.untitledapk.database;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -6,10 +6,10 @@ import android.os.AsyncTask;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 import com.untitled.untitledapk.persistence.RestaurantDao;
+import com.untitled.untitledapk.persistence.RestaurantDatabase;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
-import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
-import com.untitled.untitledapk.persistence.RestaurantsDatabase;
+import com.untitled.untitledapk.persistence.RestaurantImageDatabase;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,14 +19,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-import static com.untitled.untitledapk.RestaurantImageManager.readRestaurantImages;
-import static com.untitled.untitledapk.RestaurantManager.readRestaurants;
+import static com.untitled.untitledapk.database.RestaurantImageManager.readRestaurantImages;
+import static com.untitled.untitledapk.database.RestaurantManager.readRestaurants;
 
 public class DatabaseWorker {
 
     private static void populateRestaurants(Context context) {
-        RestaurantsDatabase restaurantsDatabase = RestaurantsDatabase.getInstance(context);
-        RestaurantDao restaurantDao = restaurantsDatabase.restaurantDao();
+        RestaurantDatabase restaurantDatabase = RestaurantDatabase.getInstance(context);
+        RestaurantDao restaurantDao = restaurantDatabase.restaurantDao();
 /*        // Food Types: 1, 2 | Category Types: 1, 2, 3
         restaurantDao.insertRestaurant(new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
         // Food Types: 1 | Category Types: 2, 3
@@ -57,8 +57,8 @@ public class DatabaseWorker {
     }
 
     private static void populateRestaurantImages(Context context) {
-        RestaurantImagesDatabase restaurantImagesDatabase = RestaurantImagesDatabase.getInstance(context);
-        RestaurantImageDao restaurantImageDao = restaurantImagesDatabase.restaurantImageDao();
+        RestaurantImageDatabase restaurantImageDatabase = RestaurantImageDatabase.getInstance(context);
+        RestaurantImageDao restaurantImageDao = restaurantImageDatabase.restaurantImageDao();
         int i = 1;
         RestaurantManager.readRestaurants(context);
         for (Restaurant restaurant : RestaurantManager.getRestaurants()) {

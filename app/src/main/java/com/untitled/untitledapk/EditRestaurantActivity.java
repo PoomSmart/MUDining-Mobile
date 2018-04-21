@@ -16,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.untitled.untitledapk.database.RestaurantImageManager;
+import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
+import com.untitled.untitledapk.utilities.TextValidator;
 
 public class EditRestaurantActivity extends AppCompatActivity {
 

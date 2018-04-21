@@ -1,4 +1,4 @@
-package com.untitled.untitledapk;
+package com.untitled.untitledapk.utilities;
 
 import android.app.Activity;
 import android.support.v7.widget.Toolbar;
@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.untitled.untitledapk.R;
 
 public class DrawerUtils {
 

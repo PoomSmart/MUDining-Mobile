@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.untitled.untitledapk.database.RestaurantImageManager;
+import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.ArrayList;

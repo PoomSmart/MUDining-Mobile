@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.Comparator;

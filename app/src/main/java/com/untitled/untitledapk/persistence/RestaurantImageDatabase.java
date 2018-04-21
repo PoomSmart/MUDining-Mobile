@@ -25,18 +25,18 @@ import android.content.Context;
  * The Room database that contains the RestaurantImages table
  */
 @Database(entities = {RestaurantImage.class}, version = 1)
-public abstract class RestaurantImagesDatabase extends RoomDatabase {
+public abstract class RestaurantImageDatabase extends RoomDatabase {
 
-    private static volatile RestaurantImagesDatabase INSTANCE;
+    private static volatile RestaurantImageDatabase INSTANCE;
 
     public abstract RestaurantImageDao restaurantImageDao();
 
-    public static RestaurantImagesDatabase getInstance(Context context) {
+    public static RestaurantImageDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (RestaurantImagesDatabase.class) {
+            synchronized (RestaurantImageDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            RestaurantImagesDatabase.class, "RestaurantImage.db")
+                            RestaurantImageDatabase.class, "RestaurantImage.db")
                             .build();
                 }
             }

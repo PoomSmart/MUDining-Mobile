@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.materialdrawer.Drawer;
+import com.untitled.untitledapk.database.DatabaseWorker;
+import com.untitled.untitledapk.utilities.DrawerUtils;
 
 import java.util.Objects;
 

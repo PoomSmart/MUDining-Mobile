@@ -1,11 +1,11 @@
-package com.untitled.untitledapk;
+package com.untitled.untitledapk.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.untitled.untitledapk.persistence.Restaurant;
 import com.untitled.untitledapk.persistence.RestaurantDao;
-import com.untitled.untitledapk.persistence.RestaurantsDatabase;
+import com.untitled.untitledapk.persistence.RestaurantDatabase;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class RestaurantManager {
 
     private static RestaurantDao getRestaurantDao(Context context) {
         if (restaurantDao == null) {
-            RestaurantsDatabase restaurantDatabase = RestaurantsDatabase.getInstance(context);
+            RestaurantDatabase restaurantDatabase = RestaurantDatabase.getInstance(context);
             restaurantDao = restaurantDatabase.restaurantDao();
         }
         return restaurantDao;

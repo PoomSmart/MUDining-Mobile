@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.untitled.untitledapk.database.RestaurantManager;
+
 public class SetPreferenceFragment extends Fragment {
 
     private CheckBox[] cbFoodTypes;

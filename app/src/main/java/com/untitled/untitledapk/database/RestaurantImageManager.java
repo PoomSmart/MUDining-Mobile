@@ -1,4 +1,4 @@
-package com.untitled.untitledapk;
+package com.untitled.untitledapk.database;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.untitled.untitledapk.persistence.RestaurantImage;
 import com.untitled.untitledapk.persistence.RestaurantImageDao;
-import com.untitled.untitledapk.persistence.RestaurantImagesDatabase;
+import com.untitled.untitledapk.persistence.RestaurantImageDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,7 +30,7 @@ public class RestaurantImageManager {
 
     private static RestaurantImageDao getRestaurantImageDao(Context context) {
         if (restaurantImageDao == null) {
-            RestaurantImagesDatabase restaurantImageDatabase = RestaurantImagesDatabase.getInstance(context);
+            RestaurantImageDatabase restaurantImageDatabase = RestaurantImageDatabase.getInstance(context);
             return restaurantImageDao = restaurantImageDatabase.restaurantImageDao();
         }
         return restaurantImageDao;

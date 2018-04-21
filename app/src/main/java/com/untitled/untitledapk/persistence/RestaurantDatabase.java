@@ -25,18 +25,18 @@ import android.content.Context;
  * The Room database that contains the Restaurants table
  */
 @Database(entities = {Restaurant.class}, version = 1)
-public abstract class RestaurantsDatabase extends RoomDatabase {
+public abstract class RestaurantDatabase extends RoomDatabase {
 
-    private static volatile RestaurantsDatabase INSTANCE;
+    private static volatile RestaurantDatabase INSTANCE;
 
     public abstract RestaurantDao restaurantDao();
 
-    public static RestaurantsDatabase getInstance(Context context) {
+    public static RestaurantDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (RestaurantsDatabase.class) {
+            synchronized (RestaurantDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            RestaurantsDatabase.class, "Restaurant.db")
+                            RestaurantDatabase.class, "Restaurant.db")
                             .build();
                 }
             }
