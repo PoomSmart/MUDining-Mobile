@@ -93,11 +93,11 @@ public class SearchFragment extends Fragment {
                 // Inflate and set the layout for the dialog
                 View v = inflater.inflate(R.layout.fragment_set_preference, null);
                 builder.setView(v)
-                        .setTitle(R.string.filter_text)
+                        .setTitle(R.string.filter)
                         // Set the action buttons
-                        .setPositiveButton(R.string.confirm_text, (dialog, id) -> calculatePrefValue())
+                        .setPositiveButton(R.string.confirm, (dialog, id) -> calculatePrefValue())
                         .setNegativeButton(android.R.string.cancel, null)
-                        .setNeutralButton(R.string.clear_text, null);
+                        .setNeutralButton(R.string.clear, null);
                 // Add checkboxes to the dialog
                 populateCheckBoxDialog(v);
                 AlertDialog dialog = builder.create();

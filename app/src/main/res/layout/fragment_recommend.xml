@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffff74"
+    android:background="@color/colorBackground"
     tools:context=".RecommendFragment">
 
     <Button
@@ -13,8 +13,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background=" #4fc3f7"
-        android:text="@string/recommend_button_text"
-        android:textColor="#ffffff" />
+        android:background="@color/colorButton"
+        android:text="@string/recommend_button"
+        android:textColor="@color/md_white_1000" />
 
 </FrameLayout>

@@ -79,7 +79,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
                 intent.putExtra("restaurant", restaurant);
                 context.startActivityForResult(intent, EDIT_RESTAURANT_REQUEST);
             });
-            viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation_text).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
+            viewHolder.resDelete.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.delete_confirmation).setMessage(String.format("Are you sure you want to remove %s?", restaurant.getName())).setIcon(R.drawable.ic_cancel).setPositiveButton(android.R.string.yes, (dialog, which) -> {
                 restaurants.remove(position);
                 RestaurantManager.deleteRestaurant(context, restaurant.getId());
                 notifyDataSetChanged();

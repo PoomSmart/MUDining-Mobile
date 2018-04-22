@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffff74"
+    android:background="@color/colorBackground"
     tools:context=".SetPreferenceFragment">
 
     <LinearLayout
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:paddingTop="15dp"
-                android:text="@string/food_type_text" />
+                android:text="@string/food_types" />
 
         </LinearLayout>
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:paddingTop="15dp"
-                android:text="@string/categories_text" />
+                android:text="@string/categories" />
 
         </LinearLayout>
 
