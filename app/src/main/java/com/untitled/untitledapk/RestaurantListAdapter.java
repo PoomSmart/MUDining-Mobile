@@ -168,9 +168,8 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
                 boolean matched = restaurant.getName().toUpperCase().contains(query);
                 if (!matched)
                     matched = restaurant.getDescription().toUpperCase().contains(query);
-                if (matched) {
+                if (matched)
                     filterList.add(restaurant);
-                }
             }
             results.count = filterList.size();
             results.values = filterList;

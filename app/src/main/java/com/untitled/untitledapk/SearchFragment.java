@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -139,7 +138,6 @@ public class SearchFragment extends Fragment {
     }
 
     public void populateCheckBoxDialog(View v) {
-        Toolbar toolbar = v.findViewById(R.id.toolbar);
         LinearLayout foodTypesLayout = v.findViewById(R.id.set_pref_food_types_layout);
         LinearLayout categoriesLayout = v.findViewById(R.id.set_pref_categories_layout);
         Context context = getActivity();

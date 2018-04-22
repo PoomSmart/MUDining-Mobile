@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -45,6 +46,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private boolean createNew;
     private boolean imageChanged;
+    private boolean hasDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         modifyLocation();
 
         mSaveRestaurantButton.setOnClickListener(v -> saveRestaurant());
-        mDiscardRestaurantButton.setOnClickListener(v -> finish());
+        mDiscardRestaurantButton.setOnClickListener(v -> cancelButtonClicked());
 
         if (!createNew) {
             mRestaurantNameField.setText(restaurant.getName());
@@ -89,13 +91,42 @@ public class EditRestaurantActivity extends AppCompatActivity {
                 if (text.isEmpty()) {
                     textView.setError("This input is required.");
                     mSaveRestaurantButton.setEnabled(false);
-                } else
+                    hasDetails |= false;
+                } else {
                     mSaveRestaurantButton.setEnabled(true);
+                    hasDetails = true;
+                }
+            }
+        });
+        mRestaurantDescriptionField.addTextChangedListener(new TextValidator(mRestaurantDescriptionField) {
+            @Override
+            public void validate(TextView textView, String text) {
+                hasDetails |= !text.isEmpty();
             }
         });
     }
 
+    private void cancelButtonClicked() {
+        if (hasDetails)
+            new AlertDialog.Builder(this).setTitle(android.R.string.dialog_alert_title).setMessage("Do you want to discard all the changes?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> finish())
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+        else
+            finish();
+    }
+
     private void saveRestaurant() {
+        if (mRestaurantImageView.getDrawable() == null) {
+            new AlertDialog.Builder(this).setTitle(android.R.string.dialog_alert_title).setMessage("An image is required.").show();
+            return;
+        }
+        String restaurantName = mRestaurantNameField.getText().toString();
+        String restaurantDescription = mRestaurantDescriptionField.getText().toString();
+        if (restaurantName.isEmpty() || restaurantDescription.isEmpty() || (createNew && updatedLocation == null)) {
+            new AlertDialog.Builder(this).setTitle(android.R.string.dialog_alert_title).setMessage("Please provide complete details of the restaurant.").show();
+            return;
+        }
         int foodTypes = 0;
         int categoryTypes = 0;
         for (int i = 0; i < mcbFoodTypes.length; i++) {
@@ -106,8 +137,8 @@ public class EditRestaurantActivity extends AppCompatActivity {
             if (mcbCategoryTypes[i].isChecked())
                 categoryTypes |= 1 << i;
         }
-        restaurant.setName(mRestaurantNameField.getText().toString());
-        restaurant.setDescription(mRestaurantDescriptionField.getText().toString());
+        restaurant.setName(restaurantName);
+        restaurant.setDescription(restaurantDescription);
         restaurant.setFoodTypes(foodTypes);
         restaurant.setCategoryTypes(categoryTypes);
         if (updatedLocation != null) {
@@ -149,6 +180,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             String foodType = RestaurantManager.foodTypes[i];
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(foodType);
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> hasDetails = true);
             if (!createNew && (restaurant.getFoodTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mFoodTypesLayout.addView(mcbFoodTypes[i] = checkBox);
@@ -158,6 +190,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
             String categoryType = RestaurantManager.categoryTypes[i];
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(categoryType);
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> hasDetails = true);
             if (!createNew && (restaurant.getCategoryTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mCategoryTypesLayout.addView(mcbCategoryTypes[i] = checkBox);
@@ -178,9 +211,11 @@ public class EditRestaurantActivity extends AppCompatActivity {
         if (requestCode == SET_LOCATION_REQUEST && resultCode == RESULT_OK) {
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
+            hasDetails = true;
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             imageChanged = true;
             mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
+            hasDetails = true;
         }
     }
 }

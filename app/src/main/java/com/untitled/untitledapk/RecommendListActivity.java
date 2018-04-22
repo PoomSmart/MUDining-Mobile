@@ -54,7 +54,7 @@ public class RecommendListActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         listView = findViewById(R.id.list);
         restaurants = RestaurantManager.getRestaurants();
-        // TODO: retain only recommended restaurants
+        // TODO: improve the recommendation algorithm?
         SharedPreferences sharedPref = this.getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
