@@ -26,17 +26,19 @@ import butterknife.ButterKnife;
 
 public class RecommendListActivity extends AppCompatActivity {
 
+    final int REQUEST_FINE_LOCATION = 1234;
+
     @BindView(R.id.toolbar)
     public Toolbar toolBar;
+    
     public int foodTypePref;
     public int categoryPref;
     public double currentLatitude;
     public double currentLongitude;
     ListView listView;
-    private List<Restaurant> restaurants;
     LocationManager locationManager;
     Location currentLocation;
-    final int REQUEST_FINE_LOCATION = 1234;
+    private List<Restaurant> restaurants;
 
     private AdapterView.OnItemClickListener listener = (parent, view, position, id) -> {
         Restaurant restaurant = restaurants.get(position);
@@ -66,31 +68,33 @@ public class RecommendListActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            Location l = locationManager.getLastKnownLocation(provider);
-            if (l == null)
-                continue;
-            if (currentLocation == null || l.getAccuracy() < currentLocation.getAccuracy()) {
-                currentLocation = l;
-                currentLatitude = currentLocation.getLatitude();
-                currentLongitude = currentLocation.getLongitude();
+        if (locationManager != null) {
+            List<String> providers = locationManager.getProviders(true);
+            for (String provider : providers) {
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null)
+                    continue;
+                if (currentLocation == null || l.getAccuracy() < currentLocation.getAccuracy()) {
+                    currentLocation = l;
+                    currentLatitude = currentLocation.getLatitude();
+                    currentLongitude = currentLocation.getLongitude();
+                }
             }
+
+            // TODO: even more efficient calculation?
+            // Sorting the restaurants with the distance
+            restaurants.sort((r1, r2) -> {
+                Double d1 = calculateDistanceFromCurrentLocation(r1);
+                Double d2 = calculateDistanceFromCurrentLocation(r2);
+                return d1.compareTo(d2);
+            });
+
+            restaurantListAdapter.setFoodTypes(foodTypePref);
+            restaurantListAdapter.setCategoryTypes(categoryPref);
+            restaurantListAdapter.getFilter().filter(null);
+
+            restaurantListAdapter.notifyDataSetChanged();
         }
-
-        // TODO: even more efficient calculation?
-        // Sorting the restaurants with the distance
-        restaurants.sort((r1, r2) -> {
-            Double d1 = calculateDistanceFromCurrentLocation(r1);
-            Double d2 = calculateDistanceFromCurrentLocation(r2);
-            return d1.compareTo(d2);
-        });
-
-        restaurantListAdapter.setFoodTypes(foodTypePref);
-        restaurantListAdapter.setCategoryTypes(categoryPref);
-        restaurantListAdapter.getFilter().filter(null);
-
-        restaurantListAdapter.notifyDataSetChanged();
     }
 
     public double calculateDistanceFromCurrentLocation(Restaurant r) {
