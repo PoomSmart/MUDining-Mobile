@@ -22,6 +22,8 @@
         android:background="@color/colorButton"
         android:clickable="true"
         android:focusable="true"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@color/colorButton"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </FrameLayout>
