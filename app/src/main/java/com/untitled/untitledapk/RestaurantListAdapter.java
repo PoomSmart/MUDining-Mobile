@@ -65,7 +65,6 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
         View rowView = convertView;
         ViewHolder viewHolder;
 
-        // TODO: Set listview resInfo width and maxLength to match editable value, add ... to the end of resInfo if possible
         if (rowView == null) {
             LayoutInflater layoutInflater = context.getLayoutInflater();
             rowView = layoutInflater.inflate(R.layout.listview_layout, null, true);
