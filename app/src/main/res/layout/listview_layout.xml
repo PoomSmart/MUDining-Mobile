@@ -44,7 +44,8 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="11dp"
                 android:layout_toEndOf="@+id/resPhoto"
-                android:maxLength="50"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="@string/restaurant_description" />
 
             <ImageButton
