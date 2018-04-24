@@ -44,9 +44,14 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     }
 
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable) {
+        this(context, restaurants, foodTypes, categoryTypes, editable, false);
+    }
+
+    RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable, boolean recommend) {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
-        Collections.sort(restaurants);
+        if (!recommend)
+            Collections.sort(restaurants);
         this.restaurants = restaurants;
         this.filteredRestaurants = restaurants;
         this.foodTypes = foodTypes;

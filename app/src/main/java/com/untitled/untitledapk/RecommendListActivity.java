@@ -60,7 +60,7 @@ public class RecommendListActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
-        RestaurantListAdapter restaurantListAdapter = new RestaurantListAdapter(this, restaurants, foodTypePref, categoryPref);
+        RestaurantListAdapter restaurantListAdapter = new RestaurantListAdapter(this, restaurants, foodTypePref, categoryPref, false, true);
         listView.setOnItemClickListener(listener);
         listView.setAdapter(restaurantListAdapter);
 
