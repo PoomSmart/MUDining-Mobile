@@ -46,7 +46,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     private boolean createNew;
     private boolean imageChanged;
-    private boolean hasDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,29 +90,18 @@ public class EditRestaurantActivity extends AppCompatActivity {
                 if (text.isEmpty()) {
                     textView.setError("This input is required.");
                     mSaveRestaurantButton.setEnabled(false);
-                    hasDetails |= false;
                 } else {
                     mSaveRestaurantButton.setEnabled(true);
-                    hasDetails = true;
                 }
-            }
-        });
-        mRestaurantDescriptionField.addTextChangedListener(new TextValidator(mRestaurantDescriptionField) {
-            @Override
-            public void validate(TextView textView, String text) {
-                hasDetails |= !text.isEmpty();
             }
         });
     }
 
     private void cancelButtonClicked() {
-        if (hasDetails)
-            new AlertDialog.Builder(this).setTitle(android.R.string.dialog_alert_title).setMessage("Do you want to discard all the changes?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> finish())
-                    .setNegativeButton(android.R.string.no, null)
-                    .show();
-        else
-            finish();
+        new AlertDialog.Builder(this).setTitle(android.R.string.dialog_alert_title).setMessage("Do you want to discard all the changes?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> finish())
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     private void saveRestaurant() {
@@ -180,7 +168,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
             String foodType = RestaurantManager.foodTypes[i];
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(foodType);
-            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> hasDetails = true);
             if (!createNew && (restaurant.getFoodTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mFoodTypesLayout.addView(mcbFoodTypes[i] = checkBox);
@@ -190,7 +177,6 @@ public class EditRestaurantActivity extends AppCompatActivity {
             String categoryType = RestaurantManager.categoryTypes[i];
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(categoryType);
-            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> hasDetails = true);
             if (!createNew && (restaurant.getCategoryTypes() & (1 << i)) != 0)
                 checkBox.setChecked(true);
             mCategoryTypesLayout.addView(mcbCategoryTypes[i] = checkBox);
@@ -211,11 +197,9 @@ public class EditRestaurantActivity extends AppCompatActivity {
         if (requestCode == SET_LOCATION_REQUEST && resultCode == RESULT_OK) {
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
-            hasDetails = true;
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             imageChanged = true;
             mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
-            hasDetails = true;
         }
     }
 }

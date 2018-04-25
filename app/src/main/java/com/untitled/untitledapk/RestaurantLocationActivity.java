@@ -63,11 +63,9 @@ public class RestaurantLocationActivity extends AppCompatActivity
     Location mCurrentLocation;
     Location mDestinationLocation;
     FusedLocationProviderClient mFusedLocationClient;
-
+    Restaurant restaurant;
     private boolean mPermissionDenied = false;
     private GoogleMap mMap;
-    Restaurant restaurant;
-
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -104,11 +102,9 @@ public class RestaurantLocationActivity extends AppCompatActivity
         route = intent.getBooleanExtra("route", false);
         if (intent.hasExtra("restaurant")) {
             restaurant = (Restaurant) intent.getExtras().get("restaurant");
-            if (!editable) {
-                mDestinationLocation = new Location("");
-                mDestinationLocation.setLatitude(restaurant.getLatitude());
-                mDestinationLocation.setLongitude(restaurant.getLongitude());
-            }
+            mDestinationLocation = new Location("");
+            mDestinationLocation.setLatitude(restaurant.getLatitude());
+            mDestinationLocation.setLongitude(restaurant.getLongitude());
         }
         mSetLocationButton = findViewById(R.id.map_set_location_button);
         mCancelButton = findViewById(R.id.map_cancel_button);
@@ -133,7 +129,7 @@ public class RestaurantLocationActivity extends AppCompatActivity
 
     private void animateToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(latLng));
         mMap.animateCamera(cameraUpdate);
