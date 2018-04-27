@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -22,10 +24,19 @@ import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
 import com.untitled.untitledapk.utilities.TextValidator;
 
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class EditRestaurantActivity extends AppCompatActivity {
 
     private static final int SET_LOCATION_REQUEST = 34;
     private static final int CAMERA_REQUEST = 16;
+    private static final int REQUEST_IMAGE_GET = 1;
+
+    @BindView(R.id.toolbar)
+    public Toolbar toolBar;
 
     Button mChangeImageButton;
     Button mSetLocationButton;
@@ -61,6 +72,11 @@ public class EditRestaurantActivity extends AppCompatActivity {
         restaurant = createNew ? new Restaurant() : (Restaurant) intent.getExtras().get("restaurant");
         if (!createNew)
             oldRestaurantId = restaurant.getId();
+
+        // Bind toolbar
+        ButterKnife.bind(this);
+        setSupportActionBar(toolBar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         mChangeImageButton = findViewById(R.id.change_image_button);
         mSetLocationButton = findViewById(R.id.set_location_button);
@@ -156,8 +172,22 @@ public class EditRestaurantActivity extends AppCompatActivity {
         mRestaurantImageView.setMaxHeight(600);
         mRestaurantImageView.setAdjustViewBounds(true);
         mChangeImageButton.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            String[] options = {"Choose from gallery", "Take a photo"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setItems(options, (dialog, which) -> {
+                if (which == 0) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    galleryIntent.setType("image/*");
+                    startActivityForResult(galleryIntent, REQUEST_IMAGE_GET);
+                }
+                else if (which == 1) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
         });
         mRestaurantImageLayout.addView(mRestaurantImageView, 0);
     }
@@ -202,4 +232,20 @@ public class EditRestaurantActivity extends AppCompatActivity {
             mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
 }
