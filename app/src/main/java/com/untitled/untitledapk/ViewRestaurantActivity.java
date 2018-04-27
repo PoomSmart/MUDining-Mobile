@@ -3,7 +3,9 @@ package com.untitled.untitledapk;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +15,10 @@ import com.untitled.untitledapk.persistence.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ViewRestaurantActivity extends AppCompatActivity {
 
@@ -24,16 +30,25 @@ public class ViewRestaurantActivity extends AppCompatActivity {
     TextView mRestaurantLocationTextView;
     private Restaurant restaurant;
 
+    @BindView(R.id.toolbar)
+    public Toolbar toolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_restaurant);
+
+        // Bind toolbar
+        ButterKnife.bind(this);
+        setSupportActionBar(toolBar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         if (!intent.hasExtra("restaurant")) {
             // No point proceeding with the null restaurant
             finish();
         }
+
         restaurant = (Restaurant) intent.getExtras().get("restaurant");
         mRestaurantImageView = findViewById(R.id.view_restaurant_image);
         mRestaurantNameTextView = findViewById(R.id.view_restaurant_name);
@@ -42,6 +57,8 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         mRestaurantCategoriesTextView = findViewById(R.id.view_restaurant_categories);
         mRestaurantLocationTextView = findViewById(R.id.view_restaurant_location);
 
+        // Filling in restaurant information
+        setTitle(restaurant.getName());
         RestaurantImageManager.loadImage(this, restaurant.getId(), mRestaurantImageView);
         mRestaurantNameTextView.setText(restaurant.getName());
         mRestaurantDescriptionTextView.setText(restaurant.getDescription());
@@ -66,5 +83,19 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         intent.putExtra("route", true);
         intent.putExtra("restaurant", restaurant);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }
