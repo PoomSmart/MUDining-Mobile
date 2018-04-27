@@ -2,6 +2,7 @@ package com.untitled.untitledapk;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -92,6 +93,7 @@ public class SearchFragment extends Fragment {
 
                 // Inflate and set the layout for the dialog
                 View v = inflater.inflate(R.layout.fragment_set_preference, null);
+                v.setBackgroundColor(Color.parseColor("#ffffff"));
                 builder.setView(v)
                         .setTitle(R.string.filter)
                         // Set the action buttons

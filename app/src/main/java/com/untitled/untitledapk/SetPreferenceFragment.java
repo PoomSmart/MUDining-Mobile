@@ -85,7 +85,6 @@ public class SetPreferenceFragment extends Fragment {
             if ((categoryPref & (1 << i)) != 0)
                 checkBox.setChecked(true);
         }
-        Toast.makeText(getContext(), "Preferences loaded!", Toast.LENGTH_SHORT).show();
     }
 
     public void populateCheckBoxList(View view) {
