@@ -42,6 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
+                    android:background="@color/colorButton"
                     android:text="@string/change_restaurant_image" />
             </FrameLayout>
 
