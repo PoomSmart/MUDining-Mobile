@@ -131,7 +131,10 @@ public class RestaurantLocationActivity extends AppCompatActivity
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(latLng));
+        MarkerOptions options = new MarkerOptions().position(latLng);
+        if (restaurant != null)
+            options.title(restaurant.getName());
+        mMap.addMarker(options);
         mMap.animateCamera(cameraUpdate);
     }
 
