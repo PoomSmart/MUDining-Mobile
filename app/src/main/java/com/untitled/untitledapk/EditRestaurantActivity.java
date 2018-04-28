@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
@@ -24,6 +25,7 @@ import com.untitled.untitledapk.database.RestaurantManager;
 import com.untitled.untitledapk.persistence.Restaurant;
 import com.untitled.untitledapk.utilities.TextValidator;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -229,6 +231,16 @@ public class EditRestaurantActivity extends AppCompatActivity {
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             imageChanged = true;
             mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
+        } else if (requestCode == REQUEST_IMAGE_GET  && resultCode == RESULT_OK) {
+            imageChanged = true;
+            Uri imageUri = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mRestaurantImageView.setImageBitmap(bitmap);
         }
     }
 
