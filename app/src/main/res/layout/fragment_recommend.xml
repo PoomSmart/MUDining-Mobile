@@ -8,20 +8,19 @@
 
     <Button
         android:id="@+id/recommend_button"
-        android:shadowColor="@color/md_grey_500"
-        android:shadowDx="5"
-        android:shadowDy="5"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bt_rounded"
+        android:elevation="10dp"
+        android:shadowColor="@color/md_grey_500"
+        android:shadowDx="5"
+        android:shadowDy="5"
         android:text="@string/recommend_button"
         android:textColor="@color/md_white_1000"
-        android:textSize="20dp"
-        android:elevation="10dp"/>
-
+        android:textSize="20dp" />
 
 
 </FrameLayout>

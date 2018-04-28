@@ -179,8 +179,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
                     Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     galleryIntent.setType("image/*");
                     startActivityForResult(galleryIntent, REQUEST_IMAGE_GET);
-                }
-                else if (which == 1) {
+                } else if (which == 1) {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 }

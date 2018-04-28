@@ -30,7 +30,7 @@ public class RecommendListActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     public Toolbar toolBar;
-    
+
     public int foodTypePref;
     public int categoryPref;
     public double currentLatitude;
