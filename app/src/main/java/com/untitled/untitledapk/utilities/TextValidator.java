@@ -1,5 +1,10 @@
 package com.untitled.untitledapk.utilities;
 
+/**
+ * Stackoverflow's helper class for validating fields
+ *
+ */
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.TextView;

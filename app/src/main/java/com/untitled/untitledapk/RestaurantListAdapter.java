@@ -25,10 +25,6 @@ import java.util.List;
 
 import static com.untitled.untitledapk.ManageRestaurantFragment.EDIT_RESTAURANT_REQUEST;
 
-/**
- * Created by User on 11/4/2561.
- */
-
 public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements Filterable {
 
     private final Activity context;

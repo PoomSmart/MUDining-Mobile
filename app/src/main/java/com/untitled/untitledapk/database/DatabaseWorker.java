@@ -88,6 +88,13 @@ public class DatabaseWorker {
         }
     }
 
+    /**
+     * Stackoverflow's method for copying file stream
+     *
+     * @param input
+     * @param output
+     * @throws IOException
+     */
     private static void copyStream(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[5120];
         int length = input.read(buffer);
@@ -97,6 +104,14 @@ public class DatabaseWorker {
         }
     }
 
+    /**
+     * Stackoverflow's method for copying resources from assets folder to internal storage
+     *
+     * @param context
+     * @param sourceFile
+     * @param destinationFile
+     * @throws IOException
+     */
     private static void copyFromAssetsToStorage(Context context, String sourceFile, String destinationFile) throws IOException {
         InputStream IS = context.getAssets().open(sourceFile);
         OutputStream OS = new FileOutputStream(destinationFile);
