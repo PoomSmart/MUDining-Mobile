@@ -17,9 +17,11 @@
 package com.untitled.untitledapk;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -47,6 +49,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.untitled.untitledapk.persistence.Restaurant;
 
+import java.util.List;
+
 public class RestaurantLocationActivity extends AppCompatActivity
         implements
         OnMapReadyCallback,
@@ -54,11 +58,13 @@ public class RestaurantLocationActivity extends AppCompatActivity
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int REQUEST_FINE_LOCATION = 1234;
     boolean editable;
     boolean route;
     Button mSetLocationButton;
     Button mCancelButton;
 
+    LocationManager locationManager;
     LocationRequest mLocationRequest;
     Location mCurrentLocation;
     Location mDestinationLocation;
@@ -100,9 +106,30 @@ public class RestaurantLocationActivity extends AppCompatActivity
         Intent intent = getIntent();
         editable = intent.getBooleanExtra("editable", true);
         route = intent.getBooleanExtra("route", false);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
         if (intent.hasExtra("restaurant")) {
             restaurant = (Restaurant) intent.getExtras().get("restaurant");
             mDestinationLocation = new Location("");
+            // Set the location of the new restaurant as the current location as default
+            if (restaurant.getLatitude() == null || restaurant.getLongitude() == null) {
+                // Get current location
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (locationManager != null) {
+                    List<String> providers = locationManager.getProviders(true);
+                    for (String provider : providers) {
+                        Location l = locationManager.getLastKnownLocation(provider);
+                        if (l == null)
+                            continue;
+                        if (mCurrentLocation == null || l.getAccuracy() < mCurrentLocation.getAccuracy()) {
+                            mCurrentLocation = l;
+                            restaurant.setLatitude(mCurrentLocation.getLatitude());
+                            restaurant.setLongitude(mCurrentLocation.getLongitude());
+                        }
+                    }
+                }
+            }
+
             mDestinationLocation.setLatitude(restaurant.getLatitude());
             mDestinationLocation.setLongitude(restaurant.getLongitude());
         }
