@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.setSelection(R.string.nav_recommend);
 
         DatabaseWorker.work(this);
+        // Request the location permission right from the beginning
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
     }

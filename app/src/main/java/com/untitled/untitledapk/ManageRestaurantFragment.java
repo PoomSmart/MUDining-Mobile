@@ -53,6 +53,7 @@ public class ManageRestaurantFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_RESTAURANT_REQUEST && resultCode == RESULT_OK) {
             if (data.hasExtra("restaurant")) {
+                // Workaround to update the information of the restaurant recently edited on the list
                 Restaurant updatedOrNewRestaurant = (Restaurant) data.getExtras().get("restaurant");
                 String oldId = data.getStringExtra("oldRestaurantId");
                 for (int i = 0; i < restaurants.size(); i++) {

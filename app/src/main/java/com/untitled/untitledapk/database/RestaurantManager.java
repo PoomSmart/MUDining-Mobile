@@ -1,6 +1,7 @@
 /**
  * RestaurantManager.java
  * Manage the reading and writing of restaurants from Restaurant database
+ * This class takes into account the requirement of asynchronous tasks and therefore adds the synchronous layer of restaurant data manipulation (a.k.a cache) to simplify database calls
  */
 
 package com.untitled.untitledapk.database;

@@ -1,6 +1,7 @@
 /**
  * RestaurantImageManager.java
  * Manage the reading, writing, and utilizing of images from RestaurantImage database
+ * The backbone logic is similar to RestaurantManager
  */
 
 package com.untitled.untitledapk.database;

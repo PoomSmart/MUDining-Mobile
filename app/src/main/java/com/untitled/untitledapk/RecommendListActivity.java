@@ -56,7 +56,6 @@ public class RecommendListActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         listView = findViewById(R.id.list);
         restaurants = RestaurantManager.getRestaurants();
-        // TODO: improve the recommendation algorithm?
         SharedPreferences sharedPref = this.getSharedPreferences("prefStore", Context.MODE_PRIVATE);
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
@@ -81,7 +80,7 @@ public class RecommendListActivity extends AppCompatActivity {
                 }
             }
 
-            // TODO: even more efficient calculation?
+            // TODO: even more efficient calculation / better recommendation algorithm?
             // Sorting the restaurants with the distance
             restaurants.sort((r1, r2) -> {
                 Double d1 = calculateDistanceFromCurrentLocation(r1);

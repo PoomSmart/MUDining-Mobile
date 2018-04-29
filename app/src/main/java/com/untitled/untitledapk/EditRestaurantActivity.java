@@ -226,12 +226,15 @@ public class EditRestaurantActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SET_LOCATION_REQUEST && resultCode == RESULT_OK) {
+            // Update the location set by the map
             updatedLocation = (Location) data.getExtras().get("restaurantLocation");
             mSetLocationButton.setText(String.format("Location: (%f, %f)", updatedLocation.getLatitude(), updatedLocation.getLongitude()));
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            // Update the restaurant image taken with the camera
             imageChanged = true;
             mRestaurantImageView.setImageBitmap((Bitmap) data.getExtras().get("data"));
         } else if (requestCode == REQUEST_IMAGE_GET  && resultCode == RESULT_OK) {
+            // Update the restaurant image chosen from the gallery
             imageChanged = true;
             Uri imageUri = data.getData();
             Bitmap bitmap = null;

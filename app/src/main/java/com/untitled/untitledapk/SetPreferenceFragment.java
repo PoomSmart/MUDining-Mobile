@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.untitled.untitledapk.database.RestaurantManager;
 
+import java.util.Objects;
+
 public class SetPreferenceFragment extends Fragment {
 
     private CheckBox[] cbFoodTypes;
@@ -96,7 +98,7 @@ public class SetPreferenceFragment extends Fragment {
         foodTypePref = sharedPref.getInt("FoodTypes", 0);
         categoryPref = sharedPref.getInt("CategoryTypes", 0);
 
-        float dpf = context.getResources().getDisplayMetrics().density;
+        float dpf = Objects.requireNonNull(context).getResources().getDisplayMetrics().density;
 
         cbFoodTypes = new CheckBox[RestaurantManager.foodTypes.length];
         for (int i = 0; i < cbFoodTypes.length; i++) {

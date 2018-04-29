@@ -46,6 +46,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
     RestaurantListAdapter(Activity context, List<Restaurant> restaurants, int foodTypes, int categoryTypes, boolean editable, boolean recommend) {
         super(context, R.layout.listview_layout, restaurants);
         this.context = context;
+        // If this is not the recommended list, do sort the list alphabetically
         if (!recommend)
             Collections.sort(restaurants);
         this.restaurants = restaurants;
@@ -135,6 +136,12 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
         return valueFilter;
     }
 
+    /**
+     * The key function to recommend restaurants using the preferences the user has
+     *
+     * @param restaurant
+     * @return A boolean value whether a restaurant matches the preferences
+     */
     private boolean restaurantMatchedFilters(final Restaurant restaurant) {
         return ((foodTypes & restaurant.getFoodTypes()) == foodTypes) && ((categoryTypes & restaurant.getCategoryTypes()) == categoryTypes);
     }
@@ -165,6 +172,7 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> implements F
                 Restaurant restaurant = filteredRestaurants.get(i);
                 if (!restaurantMatchedFilters(restaurant))
                     continue;
+                // Filter restaurants using both names and descriptions
                 boolean matched = restaurant.getName().toUpperCase().contains(query);
                 if (!matched)
                     matched = restaurant.getDescription().toUpperCase().contains(query);
