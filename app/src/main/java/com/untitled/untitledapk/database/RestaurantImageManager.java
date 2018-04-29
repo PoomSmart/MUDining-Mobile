@@ -1,3 +1,8 @@
+/**
+ * RestaurantImageManager.java
+ * Manage the reading, writing, and utilizing of images from RestaurantImage database
+ */
+
 package com.untitled.untitledapk.database;
 
 import android.content.Context;

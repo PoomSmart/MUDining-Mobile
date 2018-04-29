@@ -1,4 +1,9 @@
+/**
+ * DatabaseWorker.java
+ * Worker responsible for populating the database with default restaurants and writing files
+ */
 package com.untitled.untitledapk.database;
+
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -24,16 +29,10 @@ import static com.untitled.untitledapk.database.RestaurantManager.readRestaurant
 
 public class DatabaseWorker {
 
+    // Insert the default restaurants into the database
     private static void populateRestaurants(Context context) {
         RestaurantDatabase restaurantDatabase = RestaurantDatabase.getInstance(context);
         RestaurantDao restaurantDao = restaurantDatabase.restaurantDao();
-/*        // Food Types: 1, 2 | Category Types: 1, 2, 3
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Alpha", 13.1533, 105.2246, 3, 7, "Awesome Restaurant"));
-        // Food Types: 1 | Category Types: 2, 3
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Beta", 13.1532, 105.2246, 1, 6, "Lovely Restaurant"));
-        // Food Types: 3 | Category Types: 2
-        restaurantDao.insertRestaurant(new Restaurant("Restaurant Gamma", 13.15315, 105.22405, 4, 4, "Wannabe Restaurant"));
-*/
         restaurantDao.insertRestaurant(new Restaurant("ไม่ตกไม่แตก", 13.7959655, 100.3255092, 9, 3, "This is one of the most well-known restaurants near Mahidol Salaya. Located directly in the front of the university, it serves wide ranges of menus, Thai and European. The most iconic thing of this place is the \"Chef\'s Choice\" menu, which can be any dish from the restaurant for only 60 Baht for those who don\'t want to choose their own menu."));
         restaurantDao.insertRestaurant(new Restaurant("สเต็กลุงหนวด", 13.7947481, 100.3271531, 8, 1, "There are many branches of Steak-lung-nhuad in Thailand, and one of the best is in front of Mahidol University. There are many kind of steaks such as chicken steak, pork chop ,fish steak, beef steak and hotdog. All steaks will be served with fries. You can choose level of steak doneness you prefer with the waiter. Also, there are many dishes of spaghetti, American fried rice, and salad. For beverages, you can order Coke, or water."));
         restaurantDao.insertRestaurant(new Restaurant("J-Class Vegetarian", 13.8016313, 100.3154292, 5, 1, "This vegetarian restaurant is located across Mahidol University near Namnuan restaurant. In the morning it serves noodle, and later in the morning it serves cooked to order food which are all vegetarian food.\n"));
@@ -49,13 +48,13 @@ public class DatabaseWorker {
         restaurantDao.insertRestaurant(new Restaurant("ศรีไทยขาหมู", 13.8020154, 100.3090175, 4, 1, "Kao Kha Moo for 75 Baht as dish is worth the money if you compare with the quantity. It serves with a medium-boiled egg."));
         restaurantDao.insertRestaurant(new Restaurant("ครัวการ์ตูน", 13.8016958, 100.3163558, 1, 1, "A small cozy restaurant at the side of Mahidol University. Serves quality Thai dishes with a relatively low price."));
         restaurantDao.insertRestaurant(new Restaurant("สุธารส", 13.7969843, 100.3254455, 1, 1, "It is a noodle restaurant. The highlight is the tasty pork which smells real good. The price is fair with quality and quantity."));
-
         restaurantDao.insertRestaurant(new Restaurant("D\'Eiffel", 13.7959242, 100.325712, 8, 3, "This is a luxurious classic European style restaurant with a quite high price."));
         restaurantDao.insertRestaurant(new Restaurant("ห้องนั่งเล่น", 13.7962527, 100.3254683, 1, 3, "It is a small restaurant. The highlight is the set menus you can have with cheap price."));
         restaurantDao.insertRestaurant(new Restaurant("โกวเล็ก กุ้งอบวุ้นเส้น", 13.7956523, 100.3255079, 5, 1, "You can enjoy the original taste of Hongkong Suki, Dried fish-maw soup and the other menus here at this food vendor."));
         restaurantDao.insertRestaurant(new Restaurant("Rit วังหลัง", 13.7972856, 100.3274831, 2, 3, "Serving Wanglang style sushi with fair price. Suitable for sushi lovers."));
     }
 
+    // Insert the default images into the database
     private static void populateRestaurantImages(Context context) {
         RestaurantImageDatabase restaurantImageDatabase = RestaurantImageDatabase.getInstance(context);
         RestaurantImageDao restaurantImageDao = restaurantImageDatabase.restaurantImageDao();
@@ -121,6 +120,7 @@ public class DatabaseWorker {
         IS.close();
     }
 
+    // Copy the default images into internal storage
     private static void copyDefaultImages(Context context) {
         AssetManager assetManager = context.getAssets();
         String assetPath = RestaurantImageManager.imageFolder;

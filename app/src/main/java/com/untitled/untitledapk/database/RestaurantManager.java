@@ -1,3 +1,8 @@
+/**
+ * RestaurantManager.java
+ * Manage the reading and writing of restaurants from Restaurant database
+ */
+
 package com.untitled.untitledapk.database;
 
 import android.content.Context;
